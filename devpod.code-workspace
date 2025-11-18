@@ -1,0 +1,19 @@
+{
+  "folders": [
+    {
+      "name": "Main Repo",
+      "path": "."
+    },
+    {
+      "name": "Backend API",
+      "path": "backend"
+    },
+    {
+      "name": "Frontend UI",
+      "path": "frontend"
+    }
+  ],
+  "settings": {
+    "terminal.integrated.cwd": "${workspaceFolder}"
+  }
+}
