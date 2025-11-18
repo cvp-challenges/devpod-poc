@@ -29,7 +29,7 @@ services:
       - ${POSTGRES_PORT_MAPPING}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ../postgres:/docker-entrypoint-initdb.d
+      - ./postgres:/docker-entrypoint-initdb.d
     networks:
       - shared-network
 
