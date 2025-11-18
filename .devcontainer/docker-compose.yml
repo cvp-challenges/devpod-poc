@@ -4,19 +4,30 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    depends_on:
-      - postgres
-      - keycloak
+    # depends_on:
+    #   - postgres
+    #   - keycloak
     env_file: .env
     volumes:
-      - ../:/workspace
+      - ..:/workspace
     ports:
       - ${FRONTEND_PORT_MAPPING}
       - ${BACKEND_PORT_MAPPING}
     networks:
       - shared-network
     # Keep container running with a long-running process for DevPod
-    command: tail -f /dev/null
+    command: >
+      /bin/sh -c '
+      if [ ! -d "/workspace/backend/.git" ]; then
+        git clone https://github.com/cvp-challenges/devpod-odos-backend.git /workspace/backend
+      fi
+      && 
+      if [ ! -d "/workspace/frontend/.git" ]; then
+        git clone https://github.com/cvp-challenges/devpod-odos-frontend.git /workspace/frontend
+      fi
+      &&
+      tail -f /dev/null
+      '
 
   # PostgreSQL Database Service
   postgres:
