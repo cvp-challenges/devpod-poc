@@ -15,9 +15,16 @@ services:
       - ${BACKEND_PORT_MAPPING}
     networks:
       - shared-network
+    user: vscode:vscode
     # Keep container running with a long-running process for DevPod
     command: >
       /bin/sh -c '
+      git config --global --add safe.directory /workspace
+      &&
+      git config --global --add safe.directory /workspace/backend
+      &&
+      git config --global --add safe.directory /workspace/frontend
+      &&
       if [ ! -d "/workspace/backend/.git" ]; then
         git clone https://github.com/cvp-challenges/devpod-odos-backend.git /workspace/backend
       fi
@@ -25,6 +32,8 @@ services:
       if [ ! -d "/workspace/frontend/.git" ]; then
         git clone https://github.com/cvp-challenges/devpod-odos-frontend.git /workspace/frontend
       fi
+      &&
+      chown -R vscode:vscode /workspace/backend /workspace/frontend || true
       &&
       tail -f /dev/null
       '
