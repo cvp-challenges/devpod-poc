@@ -1,3 +1,4 @@
+
 {
   "name": "Full Stack Dev Environment",
   "dockerComposeFile": "./docker-compose.yml",
@@ -16,7 +17,11 @@
     }
   },
   "forwardPorts": [3000, 8089],
-  "postCreateCommand": "git clone https://github.com/cvp-challenges/devpod-odos-backend.git ./backend && git clone https://github.com/cvp-challenges/devpod-odos-frontend.git ./frontend",
+
+  "postCreateCommand": [
+    "git clone https://github.com/cvp-challenges/devpod-odos-backend.git /workspace/backend",
+    "git clone https://github.com/cvp-challenges/devpod-odos-frontend.git /workspace/frontend"
+  ],
   "postAttachCommand": "echo 'Development environment ready...'",
   "remoteUser": "vscode"
 }
