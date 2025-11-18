@@ -1,0 +1,95 @@
+services:
+  # Main development container (where you will code)
+  workspace:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # depends_on:
+    #   - postgres
+    #   - keycloak
+    env_file: .env
+    volumes:
+      - ..:/workspace
+    ports:
+      - ${FRONTEND_PORT_MAPPING}
+      - ${BACKEND_PORT_MAPPING}
+    networks:
+      - shared-network
+    # Keep container running with a long-running process for DevPod
+    command: tail -f /dev/null
+
+  # PostgreSQL Database Service
+  # postgres:
+  #   image: postgres:15-alpine
+  #   restart: unless-stopped
+  #   env_file: .env
+  #   environment:
+  #     POSTGRES_HOST_AUTH_METHOD: trust
+  #   ports:
+  #     - ${POSTGRES_PORT_MAPPING}
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #     - ./postgres:/docker-entrypoint-initdb.d
+  #   networks:
+  #     - shared-network
+
+  # PgAdmin Service
+  # pgadmin:
+  #   user: root
+  #   image: dpage/pgadmin4:latest
+  #   depends_on:
+  #     - postgres
+  #   ports:
+  #     - $PGADMIN_PORT_MAPPING
+  #   env_file: .env
+  #   environment:
+  #     PGADMIN_CONFIG_SERVER_MODE: "False"
+  #     PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+  #   networks:
+  #     - shared-network
+  #   entrypoint: >
+  #     /bin/sh -c '
+  #     echo "postgres:5432:$POSTGRES_DB:$POSTGRES_USER:$POSTGRES_PASSWORD" > /tmp/pgpassfile;
+  #     chmod 600 /tmp/pgpassfile;
+  #     echo "{\"Servers\":{\"1\":{\"Name\":\"develpoment\",\"Group\":\"Servers\",\"Host\":\"postgres\",\"Port\":$POSTGRES_PORT,\"MaintenanceDB\":\"$POSTGRES_DB\",\"Username\":\"$POSTGRES_USER\",\"PassFile\":\"/tmp/pgpassfile\",\"SSLMode\":\"prefer\"}}}" > /pgadmin4/servers.json;
+  #     /entrypoint.sh'
+
+  # Keycloak Authentication Service
+  # keycloak:
+  #   image: quay.io/keycloak/keycloak:23.0
+  #   depends_on:
+  #     - postgres
+  #   restart: unless-stopped
+  #   env_file: .env
+  #   environment:
+  #     KC_DB: postgres
+  #     KC_DB_URL: jdbc:postgresql://postgres:${POSTGRES_PORT}/${KEYCLOAK_DB}
+  #     KC_DB_USERNAME: ${KEYCLOAK_DB_USER}
+  #     KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+  #     KC_HOSTNAME_STRICT: false
+  #     KC_HOSTNAME_STRICT_HTTPS: false
+  #     KC_HTTP_ENABLED: true
+  #     KC_LOG_LEVEL: info
+  #     KC_METRICS_ENABLED: true
+  #     KC_HEALTH_ENABLED: true
+  #   ports:
+  #     - ${KEYCLOAK_PORT_MAPPING}
+  #   volumes:
+  #     - keycloak_data:/opt/keycloak/data
+  #   command: start-dev
+  #   networks:
+  #     - shared-network
+
+# volumes:
+#   postgres_data:
+#     driver: local
+#   keycloak_data:
+#     driver: local
+
+networks:
+  shared-network:
+    name: shared-network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

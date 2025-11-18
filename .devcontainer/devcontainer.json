@@ -1,0 +1,21 @@
+{
+  "name": "Full Stack Dev Environment",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+      },
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "msjsdiag.vscode-react-native",
+        "ms-vscode.vscode-typescript-next"
+      ]
+    }
+  },
+  "forwardPorts": [3000, 8089],
+  "postCreateCommand": "git clone https://github.com/cvp-challenges/devpod-odos-backend.git /workspace/backend && git clone https://github.com/cvp-challenges/devpod-odos-frontend.git /workspace/frontend",
+  "postAttachCommand": "echo 'Development environment ready...'",
+  "remoteUser": "vscode"
+}
