@@ -1,11 +1,15 @@
 {
   "name": "Full Stack Dev Environment",
-  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "workspace",
   "workspaceFolder": "/workspace",
   "customizations": {
     "vscode": {
       "settings": {
-        "terminal.integrated.shell.linux": "/bin/bash"
+        "terminal.integrated.shell.linux": "/bin/bash",
+        "git.detectSubmodules": false,
+        "git.autoRepositoryDetection": true,
+        "git.scanRepositories": ["/workspace"]
       },
       "extensions": [
         "vscjava.vscode-java-pack",
@@ -16,6 +20,12 @@
   },
   "forwardPorts": [3000, 8089],
   "remoteUser": "vscode",
-  "postCreateCommand": "sed -i -e 's/\r$//' /workspace/.devcontainer/scripts/init.sh && /workspace/.devcontainer/scripts/init.sh"
+  "postCreateCommand": "sed -i -e 's/\r$//' /workspace/.devcontainer/scripts/init.sh && /workspace/.devcontainer/scripts/init.sh",
+  "mounts": [
+    "source=${localEnv:HOME}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
+  ],
+  "containerEnv": {
+    "GIT_EDITOR": "code --wait"
+  }
 }
-

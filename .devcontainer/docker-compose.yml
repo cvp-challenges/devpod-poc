@@ -9,15 +9,25 @@ services:
     #   - keycloak
     env_file: .env
     volumes:
-      - ..:/workspace
+      - ..:/workspace:cached
       - ~/.gitconfig:/home/vscode/.gitconfig:ro
+      - ~/.ssh:/home/vscode/.ssh:ro
+      - vscode-extensions:/home/vscode/.vscode-server/extensions
+      - vscode-extensions-insiders:/home/vscode/.vscode-server-insiders/extensions
     ports:
       - ${FRONTEND_PORT_MAPPING}
       - ${BACKEND_PORT_MAPPING}
     networks:
       - shared-network
     user: vscode:vscode
+    environment:
+      - GIT_EDITOR=code --wait
+      - SHELL=/bin/bash
     command: ["tail", "-f", "/dev/null"]
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
 
   # PostgreSQL Database Service
   postgres:
@@ -84,6 +94,10 @@ volumes:
   postgres_data:
     driver: local
   keycloak_data:
+    driver: local
+  vscode-extensions:
+    driver: local
+  vscode-extensions-insiders:
     driver: local
 
 networks:
