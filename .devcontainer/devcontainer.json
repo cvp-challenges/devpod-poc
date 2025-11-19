@@ -3,18 +3,8 @@
   "dockerComposeFile": "docker-compose.yml",
   "service": "workspace",
   "workspaceFolder": "/workspace",
-
-  "mounts": [
-    "source=devcontainer-yarn-cache,target=/home/vscode/.yarn_cache,type=volume"
-  ],
-
-  "remoteEnv": {
-    "GIT_COMMITTER_NAME": "${localEnv:GIT_COMMITTER_NAME}",
-    "GIT_COMMITTER_EMAIL": "${localEnv:GIT_COMMITTER_EMAIL}",
-    "YARN_CACHE_FOLDER": "/home/vscode/.yarn_cache"
-  },
-
-  "forwardPorts": [3000, 8089],
+  "runServices": ["workspace", "postgres", "pgadmin"],
+  "shutdownAction": "stopCompose",
 
   "features": {
     "ghcr.io/devcontainers/features/java:1": {
@@ -25,6 +15,13 @@
     }
   },
 
+  "remoteEnv": {
+    "GIT_COMMITTER_NAME": "${localEnv:GIT_COMMITTER_NAME}",
+    "GIT_COMMITTER_EMAIL": "${localEnv:GIT_COMMITTER_EMAIL}",
+  },
+
+  "forwardPorts": [3000, 8089],
+
   "customizations": {
     "vscode": {
       "settings": {
@@ -34,10 +31,48 @@
         "git.autoRepositoryDetection": true,
         "git.scanRepositories": ["/workspace"]
       },
-      "extensions": []
+      "extensions": [],
+      "tasks": {
+        "version": "2.0.0",
+        "tasks": [
+          {
+            "label": "Install frontend",
+            "type": "shell",
+            "command": "cd frontend && yarn install",
+            "presentation": { "panel": "new", "reveal": "always" }
+          },
+          {
+            "label": "Build backend",
+            "type": "shell",
+            "command": "cd backend && ./mvn clean package -DskipTests",
+            "presentation": { "panel": "new", "reveal": "always" }
+          },
+          {
+            "label": "Run frontend (Next.js)",
+            "type": "shell",
+            "command": "cd frontend && yarn dev",
+            "isBackground": true,
+            "presentation": { "panel": "dedicated", "reveal": "always" }
+          },
+          {
+            "label": "Run backend (Spring Boot)",
+            "type": "shell",
+            "command": "cd backend && ./mvn spring-boot:run",
+            "isBackground": true,
+            "presentation": { "panel": "dedicated", "reveal": "always" }
+          },
+          {
+            "label": "Start full stack",
+            "dependsOn": [
+              "Install frontend",
+              "Build backend",
+              "Run frontend (Next.js)",
+              "Run backend (Spring Boot)"
+            ],
+            "dependsOrder": "sequence"
+          }
+        ]
+      }
     }
-  },
-
-  "runServices": ["workspace", "postgres", "pgadmin"],
-  "shutdownAction": "stopCompose"
+  }
 }
