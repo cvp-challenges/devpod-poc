@@ -22,7 +22,7 @@
     "GIT_COMMITTER_EMAIL": "${localEnv:GIT_COMMITTER_EMAIL}",
   },
 
-  "forwardPorts": [3000, 8089],
+  // "forwardPorts": [3000, 8089],
 
   // "features": {
   //   "ghcr.io/devcontainers/features/java:1": {
