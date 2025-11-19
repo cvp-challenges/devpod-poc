@@ -17,8 +17,6 @@ services:
     networks:
       - shared-network
     user: vscode:vscode
-    command: >
-      /bin/bash /workspace/.devcontainer/scripts/workspace-startup.sh
 
   # PostgreSQL Database Service
   postgres:
