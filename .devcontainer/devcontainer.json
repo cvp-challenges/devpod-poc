@@ -1,8 +1,6 @@
 {
   "name": "Full Stack Dev Environment",
-  "dockerComposeFile": "./docker-compose.yml",
-  "service": "workspace",
-  "workspaceFolder": "/workspace",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
   "customizations": {
     "vscode": {
       "settings": {
@@ -16,5 +14,6 @@
     }
   },
   "forwardPorts": [3000, 8089],
-  "remoteUser": "vscode"
+  "remoteUser": "vscode",
+  "postCreateCommand": "./scripts/init.sh"
 }
