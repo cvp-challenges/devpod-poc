@@ -18,13 +18,6 @@
   },
 
   "postCreateCommand": "echo 'THIS IS THE POST CREATE COMMAND' && /workspace/.devcontainer/setup.sh",
-  //"postCreateCommand": "sed -i -e 's/\r$//' /workspace/.devcontainer/scripts/init.sh && /workspace/.devcontainer/scripts/init.sh"
-
-  "mounts": [
-    // Mount local git credentials/config
-    "source=${env:HOME}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached",
-    "source=${env:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
-  ],
 
   "remoteEnv": {
     "GIT_COMMITTER_NAME": "${localEnv:GIT_COMMITTER_NAME}",
@@ -38,8 +31,6 @@
     "ghcr.io/devcontainers/features/node:1": {
       "version": "20"
     }
-    // "ghcr.io/devcontainers/features/git:1": {},
-    // "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
 
   "runServices": ["workspace", "postgres", "pgadmin"],

@@ -13,7 +13,6 @@ services:
     networks:
       - shared-network
     command: sleep infinity
-    # command: ["tail", "-f", "/dev/null"]
 
   # PostgreSQL Database Service
   postgres:

@@ -1,53 +1,46 @@
 #!/bin/bash
 set -e
 
-# --- Setup Git credential helper for HTTPS URLs ---
-# This allows git to use local credentials (e.g. GitHub token or credential store)
-git config --global credential.helper store || true
-git config --global credential.helper 'cache --timeout=3600' || true
+echo "🚀 Setting up workspace..."
 
-# --- Clone repos if needed ---
+# Clone or pull frontend repo
 if [ ! -d "frontend" ]; then
-  echo "Cloning frontend repo from $FRONTEND_REPO ..."
-  git clone "$FRONTEND_REPO" frontend || {
-    echo "❌ Failed to clone frontend. Check SSH/HTTPS access."
-    exit 1
-  }
+  echo "Cloning frontend..."
+  git clone "$FRONTEND_REPO" frontend
+else
+  echo "Updating frontend..."
+  cd frontend && git pull && cd ..
 fi
 
+# Clone or pull backend repo
 if [ ! -d "backend" ]; then
-  echo "Cloning backend repo from $BACKEND_REPO ..."
-  git clone "$BACKEND_REPO" backend || {
-    echo "❌ Failed to clone backend. Check SSH/HTTPS access."
-    exit 1
-  }
+  echo "Cloning backend..."
+  git clone "$BACKEND_REPO" backend
+else
+  echo "Updating backend..."
+  cd backend && git pull && cd ..
 fi
 
-# --- Prepare frontend ---
-#echo "Installing frontend dependencies..."
-#npm install --prefix frontend
+# echo "Installing frontend dependencies..."
+# npm install --prefix frontend
 
-# --- Build backend if Maven wrapper present ---
-#if [ -f backend/mvnw ]; then
-#  echo "Building backend..."
-#  (cd backend && ./mvnw clean package -DskipTests)
-#fi
+# if [ -f backend/mvnw ]; then
+#   echo "Building backend..."
+#   cd backend && ./mvnw clean package -DskipTests && cd ..
+# fi
 
-# --- Start both servers concurrently ---
-#echo "Starting backend and frontend..."
-#cat > start.sh <<'EOF'
-##!/bin/bash
-#trap "exit" INT TERM
-#trap "kill 0" EXIT
+# # Run both services
+# echo "Starting development servers..."
+# cat > start.sh <<'EOF'
+# #!/bin/bash
+# trap "exit" INT TERM
+# trap "kill 0" EXIT
 
-#echo "Launching Spring Boot..."
-#(cd backend && ./mvnw spring-boot:run) &
+# (cd backend && ./mvnw spring-boot:run) &
+# (cd frontend && npm run dev) &
 
-#echo "Launching Next.js..."
-#(cd frontend && npm run dev) &
+# wait
+# EOF
 
-#wait
-#EOF
-
-#chmod +x start.sh
-#./start.sh
+# chmod +x start.sh
+# ./start.sh
