@@ -14,6 +14,6 @@ FROM mcr.microsoft.com/devcontainers/base:ubuntu-22.04
 
 COPY ./scripts/workspace-startup.sh /usr/local/bin/startup.sh
 
-RUN chmod +x /usr/local/bin/setup.sh
+RUN chmod +x /usr/local/bin/startup.sh
 
-ENTRYPOINT ["/usr/local/bin/setup.sh"]
+ENTRYPOINT ["/usr/local/bin/startup.sh"]
