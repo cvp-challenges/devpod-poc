@@ -1,5 +1,3 @@
-
-
 {
   "name": "Full Stack Dev Environment",
   "dockerComposeFile": "./docker-compose.yml",
