@@ -53,6 +53,12 @@ set -e
 #   done
 # fi
 
+mkdir common
+mv .git/ common/
+mv .devcontainer/ common/
+mv postgres/ common/
+mv keycloak/ common/
+
 if [ ! -d "/workspace/backend/.git" ] || [ -z "$(ls -A /workspace/backend 2>/dev/null)" ]; then
   rm -rf /workspace/backend
   git clone https://github.com/cvp-challenges/devpod-odos-backend.git /workspace/backend
@@ -67,8 +73,9 @@ fi
 # chown -R vscode:vscode /workspace /workspace/frontend /workspace/backend || true
 
 # Configure git safe directories
-git config --global --add safe.directory /workspace
-#git config --global --add safe.directory /workspace/backend
-#git config --global --add safe.directory /workspace/frontend
+git config --global --add safe.directory /workspace/common
+git config --global --add safe.directory /workspace/backend
+git config --global --add safe.directory /workspace/frontend
 
 echo "Development environment setup complete!"
+
