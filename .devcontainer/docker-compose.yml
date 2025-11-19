@@ -5,8 +5,11 @@ services:
       context: .
       dockerfile: Dockerfile
     env_file: .env
+    environment:
+      NODE_ENV: development
     volumes:
-      - ..:/workspace:cached
+      - workspace_data:/workspace
+      - ./devcontainer:/workspace/.devcontainer:rod
     ports:
       - ${FRONTEND_PORT_MAPPING}
       - ${BACKEND_PORT_MAPPING}
@@ -79,6 +82,8 @@ volumes:
   pgdata:
     driver: local
   keycloak_data:
+    driver: local
+  workspace_data:
     driver: local
 
 networks:

@@ -1,10 +1,17 @@
 #!/bin/bash
-set -e
+set -Eeuo pipefail
 
 echo "⚙️  Bootstrapping multi-repo workspace via entrypoint..."
 
 FRONTEND_REF="${FRONTEND_REF:-main}"
 BACKEND_REF="${BACKEND_REF:-main}"
+
+# ------------------------------------------------------------------------------
+# UTILITY FUNCTION: never let any command failure kill the container
+# ------------------------------------------------------------------------------
+safe_exec() {
+  "$@" || echo "⚠️ Command failed: $* (continuing)"
+}
 
 # ------------------------------------------------------------------------------
 # LOAD LOCAL CONFIG (.env)
@@ -19,11 +26,11 @@ fi
 # ------------------------------------------------------------------------------
 # BASIC GIT CONFIGURATION
 # ------------------------------------------------------------------------------
-git config --global --add safe.directory /workspace || true
-git config --global credential.helper 'cache --timeout=3600' || true
+safe_exec git config --global --add safe.directory /workspace
+safe_exec git config --global credential.helper 'cache --timeout=3600'
 
 # ------------------------------------------------------------------------------
-# HELPER FUNCTIONS
+# CLONE OR UPDATE REPOSITORIES
 # ------------------------------------------------------------------------------
 clone_or_update() {
   local dir=$1
@@ -33,31 +40,31 @@ clone_or_update() {
 
   if [ ! -d "$path/.git" ]; then
     echo "📦 Cloning $repo into $dir"
-    git clone "$repo" "$path"
+    safe_exec git clone "$repo" "$path"
   else
-    echo "🔁 Updating existing repo in $dir"
-    (cd "$path" && git fetch origin) || true
+    echo "🔁 Updating $dir"
+    safe_exec bash -c "cd '$path' && git fetch origin"
   fi
 
   echo "🔖 Checking out $ref in $dir"
-  (cd "$path" && git checkout "$ref" && git pull origin "$ref" || true)
+  safe_exec bash -c "cd '$path' && git checkout '$ref' && git pull origin '$ref'"
 }
 
 clone_or_update "frontend" "$FRONTEND_REPO" "$FRONTEND_REF"
 clone_or_update "backend" "$BACKEND_REPO" "$BACKEND_REF"
 
 # ------------------------------------------------------------------------------
-# FRONTEND SETUP (Incremental via Yarn)
+# FRONTEND SETUP (Yarn with persistent cache)
 # ------------------------------------------------------------------------------
-echo "📋 Ensuring frontend dependencies (Yarn)..."
+echo "📋 Validating frontend dependencies..."
 FRONTEND_NODE_MODULES="/workspace/frontend/node_modules"
 FRONTEND_LOCKFILE="/workspace/frontend/yarn.lock"
 
 if [ ! -d "$FRONTEND_NODE_MODULES" ] || [ "$FRONTEND_LOCKFILE" -nt "$FRONTEND_NODE_MODULES" ]; then
-  echo "📦 Installing/updating frontend dependencies with Yarn..."
-  (cd /workspace/frontend && yarn install --frozen-lockfile)
+  echo "📦 Installing/updating frontend packages with Yarn..."
+  safe_exec bash -c "cd /workspace/frontend && yarn install --frozen-lockfile"
 else
-  echo "✅ Frontend dependencies up-to-date."
+  echo "✅ Frontend dependencies are current."
 fi
 
 # ------------------------------------------------------------------------------
@@ -70,42 +77,41 @@ build_backend() {
     if command -v mvn &>/dev/null; then
       if [ ! -f "$backend/target/.last-build" ] || find "$backend/src" -type f -newer "$backend/target/.last-build" | grep -q .; then
         echo "🧱 Building backend via Maven..."
-        (cd "$backend" && mvn -q clean package -DskipTests)
+        safe_exec bash -c "cd '$backend' && mvn -q clean package -DskipTests"
         touch "$backend/target/.last-build"
       else
-        echo "✅ Backend already built (Maven, no source changes)."
+        echo "✅ Backend build up-to-date (Maven)."
       fi
     fi
   elif [ -f "$backend/build.gradle" ] || [ -f "$backend/build.gradle.kts" ]; then
     if command -v gradle &>/dev/null; then
       if [ ! -f "$backend/build/.last-build" ] || find "$backend/src" -type f -newer "$backend/build/.last-build" | grep -q .; then
         echo "🧱 Building backend via Gradle..."
-        (cd "$backend" && gradle -q build -x test)
+        safe_exec bash -c "cd '$backend' && gradle -q build -x test"
         touch "$backend/build/.last-build"
       else
-        echo "✅ Backend already built (Gradle, no source changes)."
+        echo "✅ Backend build up-to-date (Gradle)."
       fi
     fi
   else
-    echo "⚠️ No recognizable backend build system found."
+    echo "⚠️ No backend build system detected."
   fi
 }
 
 build_backend
 
 # ------------------------------------------------------------------------------
-# STARTUP FUNCTIONS (Yarn & Spring Boot)
+# START SERVICES (non-blocking)
 # ------------------------------------------------------------------------------
 start_backend() {
-  local backend="/workspace/backend"
-  if [ -f "$backend/pom.xml" ]; then
+  if [ -f "/workspace/backend/pom.xml" ]; then
     echo "→ Starting Spring Boot backend (Maven)"
-    (cd "$backend" && mvn spring-boot:run)
-  elif [ -f "$backend/build.gradle" ] || [ -f "$backend/build.gradle.kts" ]; then
+    (cd /workspace/backend && mvn spring-boot:run)
+  elif [ -f "/workspace/backend/build.gradle" ] || [ -f "/workspace/backend/build.gradle.kts" ]; then
     echo "→ Starting Spring Boot backend (Gradle)"
-    (cd "$backend" && gradle bootRun)
+    (cd /workspace/backend && gradle bootRun)
   else
-    echo "⚠️ Backend start skipped – no supported configuration."
+    echo "⚠️ Backend start skipped."
   fi
 }
 
@@ -114,30 +120,24 @@ start_frontend() {
   (cd /workspace/frontend && yarn dev)
 }
 
-# ------------------------------------------------------------------------------
-# RUN SERVICES (non-blocking)
-# ------------------------------------------------------------------------------
-echo "🚀 Launching backend and frontend..."
-
-start_backend &
-backend_pid=$!
-
-start_frontend &
-frontend_pid=$!
+echo "🚀 Launching services in background"
+(start_backend &) && backend_pid=$!
+(start_frontend &) && frontend_pid=$!
 
 # ------------------------------------------------------------------------------
-# KEEP CONTAINER ALIVE EVEN IF BOTH STOP
+# KEEP CONTAINER ALIVE PERMANENTLY (regardless of process state)
 # ------------------------------------------------------------------------------
+echo "🟢 Devcontainer setup complete. Keeping container alive..."
+
+# Endless idle loop to prevent container exit
 while true; do
-  if [ -n "$backend_pid" ] && ! kill -0 "$backend_pid" 2>/dev/null; then
-    echo "⚠️ Backend process stopped."
+  if [ -n "${backend_pid:-}" ] && ! kill -0 "$backend_pid" 2>/dev/null; then
+    echo "⚠️ Backend process has stopped."
     backend_pid=""
   fi
-
-  if [ -n "$frontend_pid" ] && ! kill -0 "$frontend_pid" 2>/dev/null; then
-    echo "⚠️ Frontend process stopped."
+  if [ -n "${frontend_pid:-}" ] && ! kill -0 "$frontend_pid" 2>/dev/null; then
+    echo "⚠️ Frontend process has stopped."
     frontend_pid=""
   fi
-
-  sleep 30 # keep alive
+  sleep 30
 done

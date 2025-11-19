@@ -4,6 +4,27 @@
   "service": "workspace",
   "workspaceFolder": "/workspace",
 
+  "mounts": [
+    "source=devcontainer-yarn-cache,target=/home/vscode/.yarn_cache,type=volume"
+  ],
+
+  "remoteEnv": {
+    "GIT_COMMITTER_NAME": "${localEnv:GIT_COMMITTER_NAME}",
+    "GIT_COMMITTER_EMAIL": "${localEnv:GIT_COMMITTER_EMAIL}",
+    "YARN_CACHE_FOLDER": "/home/vscode/.yarn_cache"
+  },
+
+  "forwardPorts": [3000, 8089],
+
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "17"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    }
+  },
+
   "customizations": {
     "vscode": {
       "settings": {
@@ -16,20 +37,6 @@
       "extensions": []
     }
   },
-
-  "remoteEnv": {
-    "GIT_COMMITTER_NAME": "${localEnv:GIT_COMMITTER_NAME}",
-    "GIT_COMMITTER_EMAIL": "${localEnv:GIT_COMMITTER_EMAIL}"
-  },
-
-  // "features": {
-  //   "ghcr.io/devcontainers/features/java:1": {
-  //     "version": "17"
-  //   },
-  //   "ghcr.io/devcontainers/features/node:1": {
-  //     "version": "20"
-  //   }
-  // },
 
   "runServices": ["workspace", "postgres", "pgadmin"],
   "shutdownAction": "stopCompose"
