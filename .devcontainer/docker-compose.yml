@@ -4,12 +4,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    # depends_on:
-    #   - postgres
+    depends_on:
+      - postgres
     #   - keycloak
     env_file: .env
     volumes:
       - ..:/workspace
+      - ~/.gitconfig:/home/vscode/.gitconfig:ro
     ports:
       - ${FRONTEND_PORT_MAPPING}
       - ${BACKEND_PORT_MAPPING}
@@ -19,22 +20,28 @@ services:
     # Keep container running with a long-running process for DevPod
     command: >
       /bin/sh -c '
-      git config --global --add safe.directory /workspace
+      # Create the common folder for shared services & devcontainer specs
+      mkdir common
+      # move all devcontainer files & folders to the common folder within the root
+      shopt -s extglob; mv /workspace/!(common) /workspace/common/
+      # Configure git safe directories
+      git config --global --add safe.directory /workspace/common
       &&
-      git config --global --add safe.directory /workspace/backend
-      &&
-      git config --global --add safe.directory /workspace/frontend
-      &&
-      if [ ! -d "/workspace/backend/.git" ]; then
+      # Only clone repositories if they don't exist or are empty
+      if [ ! -d "/workspace/backend/.git" ] || [ -z "$(ls -A /workspace/backend)" ]; then
+        rm -rf /workspace/backend
         git clone https://github.com/cvp-challenges/devpod-odos-backend.git /workspace/backend
       fi
-      && 
-      if [ ! -d "/workspace/frontend/.git" ]; then
+      &&
+      if [ ! -d "/workspace/frontend/.git" ] || [ -z "$(ls -A /workspace/frontend)" ]; then
+        rm -rf /workspace/frontend
         git clone https://github.com/cvp-challenges/devpod-odos-frontend.git /workspace/frontend
       fi
       &&
+      # Fix ownership
       chown -R vscode:vscode /workspace/backend /workspace/frontend || true
       &&
+      # Wait for the container to stay alive
       tail -f /dev/null
       '
 
@@ -43,8 +50,6 @@ services:
     image: postgres:15-alpine
     restart: unless-stopped
     env_file: .env
-    environment:
-      POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - ${POSTGRES_PORT_MAPPING}
     volumes:
