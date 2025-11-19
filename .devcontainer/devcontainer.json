@@ -1,7 +1,7 @@
 {
   "name": "Full Stack Dev Environment",
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
-  "workspaceFolder": "workspace",
+  "workspaceFolder": "/workspace",
   "customizations": {
     "vscode": {
       "settings": {
