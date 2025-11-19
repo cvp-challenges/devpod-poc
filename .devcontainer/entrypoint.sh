@@ -1,130 +1,143 @@
 #!/bin/bash
 set -e
 
-echo "⚙️  Initializing multi-repo workspace..."
+echo "⚙️  Bootstrapping multi-repo workspace via entrypoint..."
 
-# ------------------------------------------------------------------------------
-# CONFIGURATION
-# ------------------------------------------------------------------------------
-
-# Default branches/tags (can also be overridden via .env)
 FRONTEND_REF="${FRONTEND_REF:-main}"
 BACKEND_REF="${BACKEND_REF:-main}"
 
 # ------------------------------------------------------------------------------
-# LOAD LOCAL ENV (.env file)
+# LOAD LOCAL CONFIG (.env)
 # ------------------------------------------------------------------------------
-
-if [ -f ".env" ]; then
-  echo "📄 Loading environment from .env"
-  export $(grep -v '^#' .env | xargs)
+if [ -f "/workspace/.env" ]; then
+  echo "📄 Loading environment variables from .env"
+  set -o allexport
+  source /workspace/.env
+  set +o allexport
 fi
 
 # ------------------------------------------------------------------------------
-# GIT CREDENTIALS + SAFE DIRECTORY
+# BASIC GIT CONFIGURATION
 # ------------------------------------------------------------------------------
-
 git config --global --add safe.directory /workspace || true
 git config --global credential.helper 'cache --timeout=3600' || true
 
 # ------------------------------------------------------------------------------
-# CLONE OR UPDATE REPOS
+# HELPER FUNCTIONS
 # ------------------------------------------------------------------------------
-
 clone_or_update() {
   local dir=$1
   local repo=$2
   local ref=$3
+  local path="/workspace/$dir"
 
-  if [ ! -d "$dir/.git" ]; then
+  if [ ! -d "$path/.git" ]; then
     echo "📦 Cloning $repo into $dir"
-    git clone "$repo" "$dir"
+    git clone "$repo" "$path"
   else
     echo "🔁 Updating existing repo in $dir"
-    (cd "$dir" && git fetch origin)
+    (cd "$path" && git fetch origin) || true
   fi
 
   echo "🔖 Checking out $ref in $dir"
-  (
-    cd "$dir"
-    git checkout "$ref" &&
-    git pull origin "$ref" || true
-  )
+  (cd "$path" && git checkout "$ref" && git pull origin "$ref" || true)
 }
 
-clone_or_update frontend "$FRONTEND_REPO" "$FRONTEND_REF"
-clone_or_update backend "$BACKEND_REPO" "$BACKEND_REF"
+clone_or_update "frontend" "$FRONTEND_REPO" "$FRONTEND_REF"
+clone_or_update "backend" "$BACKEND_REPO" "$BACKEND_REF"
 
 # ------------------------------------------------------------------------------
-# FRONTEND SETUP
+# FRONTEND SETUP (Incremental via Yarn)
 # ------------------------------------------------------------------------------
+echo "📋 Ensuring frontend dependencies (Yarn)..."
+FRONTEND_NODE_MODULES="/workspace/frontend/node_modules"
+FRONTEND_LOCKFILE="/workspace/frontend/yarn.lock"
 
-echo "📋 Installing frontend dependencies..."
-# npm install --prefix frontend
+if [ ! -d "$FRONTEND_NODE_MODULES" ] || [ "$FRONTEND_LOCKFILE" -nt "$FRONTEND_NODE_MODULES" ]; then
+  echo "📦 Installing/updating frontend dependencies with Yarn..."
+  (cd /workspace/frontend && yarn install --frozen-lockfile)
+else
+  echo "✅ Frontend dependencies up-to-date."
+fi
 
 # ------------------------------------------------------------------------------
-# BACKEND BUILD (supports mvn wrapper or system mvn)
+# BACKEND BUILD (Incremental)
 # ------------------------------------------------------------------------------
-
 build_backend() {
-  if [ -f backend/mvnw ]; then
-    echo "🧱 Building backend with Maven Wrapper..."
-    # (cd backend && ./mvnw clean package -DskipTests)
-  elif command -v mvn &>/dev/null && [ -f backend/pom.xml ]; then
-    echo "🧱 Building backend with system Maven..."
-    # (cd backend && mvn clean package -DskipTests)
-  elif [ -f backend/build.gradle ] || [ -f backend/build.gradle.kts ]; then
-    echo "🧱 Detected Gradle project (building)..."
-    # if [ -x "$(command -v gradle)" ]; then
-    #   (cd backend && gradle build -x test)
-    # else
-    #   echo "⚠️ Gradle not installed; build skipped."
-    # fi
+  local backend="/workspace/backend"
+
+  if [ -f "$backend/pom.xml" ]; then
+    if command -v mvn &>/dev/null; then
+      if [ ! -f "$backend/target/.last-build" ] || find "$backend/src" -type f -newer "$backend/target/.last-build" | grep -q .; then
+        echo "🧱 Building backend via Maven..."
+        (cd "$backend" && mvn -q clean package -DskipTests)
+        touch "$backend/target/.last-build"
+      else
+        echo "✅ Backend already built (Maven, no source changes)."
+      fi
+    fi
+  elif [ -f "$backend/build.gradle" ] || [ -f "$backend/build.gradle.kts" ]; then
+    if command -v gradle &>/dev/null; then
+      if [ ! -f "$backend/build/.last-build" ] || find "$backend/src" -type f -newer "$backend/build/.last-build" | grep -q .; then
+        echo "🧱 Building backend via Gradle..."
+        (cd "$backend" && gradle -q build -x test)
+        touch "$backend/build/.last-build"
+      else
+        echo "✅ Backend already built (Gradle, no source changes)."
+      fi
+    fi
   else
-    echo "⚠️ No recognizable build file found (no pom.xml or gradle.build). Skipping backend build."
+    echo "⚠️ No recognizable backend build system found."
   fi
 }
 
 build_backend
 
 # ------------------------------------------------------------------------------
-# STARTUP SCRIPT (no mvnw requirement)
+# STARTUP FUNCTIONS (Yarn & Spring Boot)
 # ------------------------------------------------------------------------------
-
-echo "🚀 Preparing startup script..."
-cat > start.sh <<'EOF'
-#!/bin/bash
-trap "exit" INT TERM
-trap "kill 0" EXIT
-
-# function to detect build system
-run_backend() {
-  if [ -f backend/mvnw ]; then
-    echo "→ Starting backend (mvnw)"
-    # (cd backend && ./mvnw spring-boot:run)
-  elif command -v mvn &>/dev/null && [ -f backend/pom.xml ]; then
-    echo "→ Starting backend (system Maven)"
-    # (cd backend && mvn spring-boot:run)
-  elif [ -f backend/build.gradle ] || [ -f backend/build.gradle.kts ]; then
-    if [ -x "$(command -v gradle)" ]; then
-      echo "→ Starting backend (Gradle)"
-      # (cd backend && gradle bootRun)
-    else
-      echo "⚠️ Gradle not installed, backend not started."
-    fi
+start_backend() {
+  local backend="/workspace/backend"
+  if [ -f "$backend/pom.xml" ]; then
+    echo "→ Starting Spring Boot backend (Maven)"
+    (cd "$backend" && mvn spring-boot:run)
+  elif [ -f "$backend/build.gradle" ] || [ -f "$backend/build.gradle.kts" ]; then
+    echo "→ Starting Spring Boot backend (Gradle)"
+    (cd "$backend" && gradle bootRun)
   else
-    echo "⚠️ No valid backend start method found."
+    echo "⚠️ Backend start skipped – no supported configuration."
   fi
 }
 
-echo "→ Starting Spring Boot/Gradle backend..."
-run_backend &
+start_frontend() {
+  echo "→ Starting Next.js frontend (Yarn)"
+  (cd /workspace/frontend && yarn dev)
+}
 
-echo "→ Starting Next.js frontend..."
-# (cd frontend && npm run dev) &
+# ------------------------------------------------------------------------------
+# RUN SERVICES (non-blocking)
+# ------------------------------------------------------------------------------
+echo "🚀 Launching backend and frontend..."
 
-wait
-EOF
+start_backend &
+backend_pid=$!
 
-chmod +x start.sh
-./start.sh
+start_frontend &
+frontend_pid=$!
+
+# ------------------------------------------------------------------------------
+# KEEP CONTAINER ALIVE EVEN IF BOTH STOP
+# ------------------------------------------------------------------------------
+while true; do
+  if [ -n "$backend_pid" ] && ! kill -0 "$backend_pid" 2>/dev/null; then
+    echo "⚠️ Backend process stopped."
+    backend_pid=""
+  fi
+
+  if [ -n "$frontend_pid" ] && ! kill -0 "$frontend_pid" 2>/dev/null; then
+    echo "⚠️ Frontend process stopped."
+    frontend_pid=""
+  fi
+
+  sleep 30 # keep alive
+done
