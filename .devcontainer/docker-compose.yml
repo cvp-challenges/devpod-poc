@@ -12,7 +12,7 @@ services:
       - ${BACKEND_PORT_MAPPING}
     networks:
       - shared-network
-    command: sleep infinity
+    command: ["/bin/bash", "/workspace/.devcontainer/entrypoint.sh"]
 
   # PostgreSQL Database Service
   postgres:
