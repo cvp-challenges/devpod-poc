@@ -1,6 +1,7 @@
 {
   "name": "Full Stack Dev Environment",
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  "workspaceFolder": "workspace",
   "customizations": {
     "vscode": {
       "settings": {
@@ -15,5 +16,5 @@
   },
   "forwardPorts": [3000, 8089],
   "remoteUser": "vscode",
-  "postCreateCommand": "./scripts/init.sh"
+  "postCreateCommand": "/workspace/.devcontainer/scripts/init.sh"
 }
