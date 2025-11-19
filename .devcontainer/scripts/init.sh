@@ -53,7 +53,7 @@ fi
 chown -R vscode:vscode /workspace/common /workspace/frontend /workspace/backend || true
 
 # Configure git safe directories
-git config --global --add safe.directory /workspace/common
+# git config --global --add safe.directory /workspace/common
 git config --global --add safe.directory /workspace/backend
 git config --global --add safe.directory /workspace/frontend
 
