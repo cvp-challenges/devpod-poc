@@ -17,44 +17,8 @@ services:
     networks:
       - shared-network
     user: vscode:vscode
-    # Keep container running with a long-running process for DevPod
     command: >
-      /bin/sh -c '
-      # Create common directory and move existing files if not already done
-      if [ ! -d "/workspace/common" ]; then
-        echo "Creating common directory and moving existing files..."
-        mkdir -p /workspace/common
-        # Move all existing files and folders to common
-        for item in /workspace/*; do
-          if [ -e "$item" ]; then
-            basename_item=$(basename "$item")
-            if [ "$basename_item" != "common" ]; then
-              mv "$item" /workspace/common/
-            fi
-          fi
-        done
-      fi
-      &&
-      # Configure git safe directories
-      git config --global --add safe.directory /workspace/common
-      &&
-      # Only clone repositories if they don't exist or are empty
-      if [ ! -d "/workspace/backend/.git" ] || [ -z "$(ls -A /workspace/backend)" ]; then
-        rm -rf /workspace/backend
-        git clone https://github.com/cvp-challenges/devpod-odos-backend.git /workspace/backend
-      fi
-      &&
-      if [ ! -d "/workspace/frontend/.git" ] || [ -z "$(ls -A /workspace/frontend)" ]; then
-        rm -rf /workspace/frontend
-        git clone https://github.com/cvp-challenges/devpod-odos-frontend.git /workspace/frontend
-      fi
-      &&
-      # Fix ownership
-      chown -R vscode:vscode /workspace/common || true
-      &&
-      # Wait for the container to stay alive
-      tail -f /dev/null
-      '
+      /bin/bash /workspace/.devcontainer/scripts/workspace-startup.sh
 
   # PostgreSQL Database Service
   postgres:
