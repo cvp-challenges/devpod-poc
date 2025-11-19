@@ -8,8 +8,7 @@ services:
     environment:
       NODE_ENV: development
     volumes:
-      - workspace_data:/workspace
-      - ./devcontainer:/workspace/.devcontainer:rod
+      - ..:/workspace:cached
     ports:
       - ${FRONTEND_PORT_MAPPING}
       - ${BACKEND_PORT_MAPPING}
@@ -82,8 +81,6 @@ volumes:
   pgdata:
     driver: local
   keycloak_data:
-    driver: local
-  workspace_data:
     driver: local
 
 networks:
