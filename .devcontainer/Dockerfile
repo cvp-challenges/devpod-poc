@@ -12,6 +12,6 @@ FROM mcr.microsoft.com/devcontainers/base:ubuntu-22.04
 # The devcontainer specification handles the installation of runtimes via 'features'
 # so this Dockerfile can remain minimal.
 
-RUN sed -i -e 's/\r$//' /workspace/.devcontainer/scripts/workspace-startup.sh
+# RUN sed -i -e 's/\r$//' /workspace/.devcontainer/scripts/workspace-startup.sh
 
 CMD [ "/workspace/.devcontainer/scripts/workspace-startup.sh" ]
