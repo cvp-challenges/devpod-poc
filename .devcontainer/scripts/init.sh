@@ -93,20 +93,44 @@ git config --global --add safe.directory /workspace/backend
 git config --global --add safe.directory /workspace/frontend
 git config --global --add safe.directory '*'
 
-# Configure Git user if not already set
-if [ -z "$(git config --global user.name)" ]; then
-    git config --global user.name "VS Code User"
+# Configure Git user from host environment
+if [ -z "$(git config --global user.name 2>/dev/null)" ]; then
+    if [ -n "$HOST_GIT_USER_NAME" ] && [ "$HOST_GIT_USER_NAME" != "USER" ]; then
+        git config --global user.name "$HOST_GIT_USER_NAME"
+        echo "Set Git user.name to: $HOST_GIT_USER_NAME (from host)"
+    else
+        echo "Warning: No host Git user name found. Please run 'git config --global user.name \"Your Name\"' to set it."
+    fi
 fi
 
-if [ -z "$(git config --global user.email)" ]; then
-    git config --global user.email "vscode@localhost"
+if [ -z "$(git config --global user.email 2>/dev/null)" ]; then
+    if [ -n "$HOST_GIT_USER_EMAIL" ] && [ "$HOST_GIT_USER_EMAIL" != "EMAIL" ]; then
+        git config --global user.email "$HOST_GIT_USER_EMAIL"
+        echo "Set Git user.email to: $HOST_GIT_USER_EMAIL (from host)"
+    else
+        echo "Warning: No host Git user email found. Please run 'git config --global user.email \"your@email.com\"' to set it."
+    fi
 fi
+
+# Display current Git configuration
+echo "Current Git configuration:"
+echo "  Name: $(git config --global user.name 2>/dev/null || echo 'Not set')"
+echo "  Email: $(git config --global user.email 2>/dev/null || echo 'Not set')"
 
 # Set Git configuration for better compatibility
 git config --global core.filemode false
 git config --global core.autocrlf input
 git config --global init.defaultBranch main
 git config --global pull.rebase false
+git config --global core.editor "code --wait"
+git config --global merge.tool vscode
+git config --global mergetool.vscode.cmd 'code --wait $MERGED'
+git config --global diff.tool vscode
+git config --global difftool.vscode.cmd 'code --wait --diff $LOCAL $REMOTE'
+
+# Ensure proper Git file permissions
+git config --global core.sharedRepository group
+git config --global receive.denyNonFastforwards false
 
 # Refresh Git index for all repositories
 cd /workspace && git status > /dev/null 2>&1 || true

@@ -10,8 +10,6 @@ services:
     env_file: .env
     volumes:
       - ..:/workspace:cached
-      - ~/.gitconfig:/home/vscode/.gitconfig:ro
-      - ~/.ssh:/home/vscode/.ssh:ro
       - vscode-extensions:/home/vscode/.vscode-server/extensions
       - vscode-extensions-insiders:/home/vscode/.vscode-server-insiders/extensions
     ports:

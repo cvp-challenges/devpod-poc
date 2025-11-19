@@ -21,11 +21,9 @@
   "forwardPorts": [3000, 8089],
   "remoteUser": "vscode",
   "postCreateCommand": "sed -i -e 's/\r$//' /workspace/.devcontainer/scripts/init.sh && /workspace/.devcontainer/scripts/init.sh",
-  "mounts": [
-    "source=${localEnv:HOME}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached",
-    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
-  ],
   "containerEnv": {
-    "GIT_EDITOR": "code --wait"
+    "GIT_EDITOR": "code --wait",
+    "HOST_GIT_USER_NAME": "${localEnv:GIT_AUTHOR_NAME:${localEnv:USER}}",
+    "HOST_GIT_USER_EMAIL": "${localEnv:GIT_AUTHOR_EMAIL:${localEnv:EMAIL}}"
   }
 }
