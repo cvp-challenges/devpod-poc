@@ -1,0 +1,323 @@
+{
+  "realm": "${KEYCLOAK_REALM}",
+  "displayName": "ODOS IV Tech Challenge (local dev)",
+  "enabled": true,
+  "loginTheme": "uscis",
+  "registrationAllowed": true,
+  "loginWithEmailAllowed": true,
+  "resetPasswordAllowed": true,
+  "roles": {
+    "realm": [
+      {
+        "name": "User",
+        "description": "A User of the system"
+      },
+      {
+        "name": "Applicant",
+        "description": "An applicant in the system"
+      },
+      {
+        "name": "CaseManager",
+        "description": "A case manager in the system"
+      },
+      {
+        "name": "Supervisor",
+        "description": "A case manager supervisor in the system"
+      },
+      {
+        "name": "Executive",
+        "description": "An executive user in the system"
+      }
+    ]
+  },
+  "groups": [
+    {
+      "name": "Users",
+      "path": "/Users"
+    },
+    {
+      "name": "Admins",
+      "path": "/Admins"
+    },
+    {
+      "name": "CaseManagers",
+      "path": "/CaseManagers",
+      "realmRoles": ["CaseManager", "User"]
+    },
+    {
+      "name": "Applicants",
+      "path": "/Applicants",
+      "realmRoles": ["Applicant", "User"]
+    },
+    {
+      "name": "Supervisors",
+      "path": "/Supervisors",
+      "realmRoles": ["Supervisor", "User"]
+    },
+    {
+      "name": "Executives",
+      "path": "/Executives",
+      "realmRoles": ["Executive", "User"]
+    }
+  ],
+  "users": [
+    {
+      "username": "service-account-admin-cli",
+      "enabled": true,
+      "serviceAccountClientId": "admin-cli",
+      "clientRoles": {
+        "realm-management": ["manage-users"]
+      }
+    },
+    {
+      "username": "clopez34",
+      "email": "Carlos.Lopez@uscis.dhs.gov",
+      "enabled": true,
+      "firstName": "Carlos",
+      "lastName": "Lopez",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "L0gMe1n!"
+        }
+      ],
+      "groups": ["/Users", "/CaseManagers"]
+    },
+    {
+      "username": "alouis14",
+      "email": "Andro.Louis@uscis.dhs.gov",
+      "enabled": true,
+      "firstName": "Andro",
+      "lastName": "Louis",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "L0gMe1n!"
+        }
+      ],
+      "groups": ["/Users", "/Supervisors"]
+    },
+    {
+      "username": "jsmith85",
+      "email": "john.smith@email.com",
+      "enabled": true,
+      "firstName": "John",
+      "lastName": "Smith",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "L0gMe1n!"
+        }
+      ],
+      "groups": ["/Users", "/Applicants"]
+    },
+    {
+      "username": "mgarcia90",
+      "email": "maria.garcia@email.com",
+      "enabled": true,
+      "firstName": "Maria",
+      "lastName": "Garcia",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "L0gMe1n!"
+        }
+      ],
+      "groups": ["/Users", "/Applicants"]
+    },
+    {
+      "username": "ejohnson88",
+      "email": "emily.johnson@email.com",
+      "enabled": true,
+      "firstName": "Emily",
+      "lastName": "Johnson",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "L0gMe1n!"
+        }
+      ],
+      "groups": ["/Users", "/Applicants"]
+    },
+    {
+      "username": "rkumar92",
+      "email": "raj.kumar@email.com",
+      "enabled": true,
+      "firstName": "Raj",
+      "lastName": "Kumar",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "L0gMe1n!"
+        }
+      ],
+      "groups": ["/Users", "/Applicants"]
+    },
+    {
+      "username": "dbrown83",
+      "email": "david.brown@email.com",
+      "enabled": true,
+      "firstName": "David",
+      "lastName": "Brown",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "L0gMe1n!"
+        }
+      ],
+      "groups": ["/Users", "/Applicants"]
+    },
+    {
+      "username": "amueller95",
+      "email": "anna.mueller@email.com",
+      "enabled": true,
+      "firstName": "Anna",
+      "lastName": "Muller",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "L0gMe1n!"
+        }
+      ],
+      "groups": ["/Users", "/Applicants"]
+    },
+    {
+      "username": "twilson87",
+      "email": "thomas.wilson@email.com",
+      "enabled": true,
+      "firstName": "Thomas",
+      "lastName": "Wilson",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "L0gMe1n!"
+        }
+      ],
+      "groups": ["/Users", "/Applicants"]
+    },
+    {
+      "username": "ytanaka93",
+      "email": "yuki.tanaka@email.com",
+      "enabled": true,
+      "firstName": "Yuki",
+      "lastName": "Tanaka",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "L0gMe1n!"
+        }
+      ],
+      "groups": ["/Users", "/Applicants"]
+    },
+    {
+      "username": "staylor91",
+      "email": "sarah.taylor@email.com",
+      "enabled": true,
+      "firstName": "Sarah",
+      "lastName": "Taylor",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "L0gMe1n!"
+        }
+      ],
+      "groups": ["/Users", "/Applicants"]
+    },
+    {
+      "username": "csilva89",
+      "email": "carlos.silva@email.com",
+      "enabled": true,
+      "firstName": "Carlos",
+      "lastName": "Silva",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "L0gMe1n!"
+        }
+      ],
+      "groups": ["/Users", "/Applicants"]
+    },
+    {
+      "username": "ehaley96",
+      "email": "ellen.haley@email.com",
+      "enabled": true,
+      "firstName": "Ellen",
+      "lastName": "Haley",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "L0gMe1n!"
+        }
+      ],
+      "groups": ["/Users", "/Executives"]
+    },
+    {
+      "username": "mallen97",
+      "email": "marquise.allen@email.com",
+      "enabled": true,
+      "firstName": "Marquise",
+      "lastName": "Allen",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "L0gMe1n!"
+        }
+      ],
+      "groups": ["/Users", "/CaseManagers"]
+    },
+    {
+      "username": "mhernandez98",
+      "email": "maria.garcia98@email.com",
+      "enabled": true,
+      "firstName": "María",
+      "lastName": "Hernández",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "L0gMe1n!"
+        }
+      ],
+      "groups": ["/Users", "/Applicants"]
+    },
+    {
+      "username": "kkovalenko99",
+      "email": "kyrylo.kovalenko@email.com",
+      "enabled": true,
+      "firstName": "Kyrylo",
+      "lastName": "Kovalenko",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "L0gMe1n!"
+        }
+      ],
+      "groups": ["/Users", "/Applicants"]
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "${KEYCLOAK_REALM}-ui",
+      "name": "ODOS IV Tech Challenge UI (local dev)",
+      "description": "Frontend UI client for ODOS IV Tech Challenge (local dev)",
+      "rootUrl": "${NEXTAUTH_URL}",
+      "baseUrl": "/",
+      "enabled": true,
+      "alwaysDisplayInConsole": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "${KEYCLOAK_CLIENT_SECRET}",
+      "redirectUris": ["/*"],
+      "webOrigins": ["*"],
+      "publicClient": true,
+      "directAccessGrantsEnabled": true
+    },
+    {
+      "clientId": "admin-cli",
+      "name": "${client_admin-cli}",
+      "secret": "${KEYCLOAK_SERVICE_ACCOUNT_CLIENT_SECRET}",
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "enabled": true
+    }
+  ],
+  "passwordPolicy": "length(8) and upperCase(1) and lowerCase(1) and digits(1) and specialChars(1) and notEmail(undefined) and notUsername(undefined) and passwordHistory(3)"
+}
