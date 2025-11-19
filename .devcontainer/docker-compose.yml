@@ -4,28 +4,16 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    depends_on:
-      - postgres
-    #   - keycloak
     env_file: .env
     volumes:
       - ..:/workspace:cached
-      - vscode-extensions:/home/vscode/.vscode-server/extensions
-      - vscode-extensions-insiders:/home/vscode/.vscode-server-insiders/extensions
     ports:
       - ${FRONTEND_PORT_MAPPING}
       - ${BACKEND_PORT_MAPPING}
     networks:
       - shared-network
-    user: vscode:vscode
-    environment:
-      - GIT_EDITOR=code --wait
-      - SHELL=/bin/bash
-    command: ["tail", "-f", "/dev/null"]
-    cap_add:
-      - SYS_PTRACE
-    security_opt:
-      - seccomp:unconfined
+    command: sleep infinity
+    # command: ["tail", "-f", "/dev/null"]
 
   # PostgreSQL Database Service
   postgres:
@@ -35,8 +23,8 @@ services:
     ports:
       - ${POSTGRES_PORT_MAPPING}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ../common/postgres:/docker-entrypoint-initdb.d
+      - pgdata:/var/lib/postgresql/data
+      - ../postgres:/docker-entrypoint-initdb.d
     networks:
       - shared-network
 
@@ -61,42 +49,38 @@ services:
       echo "{\"Servers\":{\"1\":{\"Name\":\"develpoment\",\"Group\":\"Servers\",\"Host\":\"postgres\",\"Port\":$POSTGRES_PORT,\"MaintenanceDB\":\"$POSTGRES_DB\",\"Username\":\"$POSTGRES_USER\",\"PassFile\":\"/tmp/pgpassfile\",\"SSLMode\":\"prefer\"}}}" > /pgadmin4/servers.json;
       /entrypoint.sh'
 
-  # Keycloak Authentication Service
-  keycloak:
-    image: quay.io/keycloak/keycloak:23.0
-    depends_on:
-      - postgres
-    restart: unless-stopped
-    env_file: .env
-    environment:
-      KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgres:${POSTGRES_PORT}/${KEYCLOAK_DB}
-      KC_DB_USERNAME: ${KEYCLOAK_DB_USER}
-      KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
-      KC_HOSTNAME_STRICT: false
-      KC_HOSTNAME_STRICT_HTTPS: false
-      KC_HTTP_ENABLED: true
-      KC_LOG_LEVEL: info
-      KC_METRICS_ENABLED: true
-      KC_HEALTH_ENABLED: true
-    ports:
-      - ${KEYCLOAK_PORT_MAPPING}
-    volumes:
-      - keycloak_data:/opt/keycloak/data
-      - ../common/keycloak:/opt/keycloak/data/import
-    command: start-dev --import-realm
-    networks:
-      - shared-network
+#   # Keycloak Authentication Service
+#   keycloak:
+#     image: quay.io/keycloak/keycloak:23.0
+#     depends_on:
+#       - postgres
+#     restart: unless-stopped
+#     env_file: .env
+#     environment:
+#       KC_DB: postgres
+#       KC_DB_URL: jdbc:postgresql://postgres:${POSTGRES_PORT}/${KEYCLOAK_DB}
+#       KC_DB_USERNAME: ${KEYCLOAK_DB_USER}
+#       KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+#       KC_HOSTNAME_STRICT: false
+#       KC_HOSTNAME_STRICT_HTTPS: false
+#       KC_HTTP_ENABLED: true
+#       KC_LOG_LEVEL: info
+#       KC_METRICS_ENABLED: true
+#       KC_HEALTH_ENABLED: true
+#     ports:
+#       - ${KEYCLOAK_PORT_MAPPING}
+#     volumes:
+#       - keycloak_data:/opt/keycloak/data
+#       - ../common/keycloak:/opt/keycloak/data/import
+#     command: start-dev --import-realm
+#     networks:
+#       - shared-network
 
 volumes:
-  postgres_data:
+  pgdata:
     driver: local
-  keycloak_data:
-    driver: local
-  vscode-extensions:
-    driver: local
-  vscode-extensions-insiders:
-    driver: local
+#   keycloak_data:
+#     driver: local
 
 networks:
   shared-network:
