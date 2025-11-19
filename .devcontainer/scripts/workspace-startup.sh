@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 echo "=== Workspace Startup Script ==="
 
@@ -16,8 +15,8 @@ if [ ! -d "/workspace/common" ]; then
         echo "Moving $basename_item to /workspace/common/"
         mv "$item" /workspace/common/
       fi
-    done
-  fi
+    fi
+  done
 else
   echo "Common directory already exists, skipping file move."
 fi
