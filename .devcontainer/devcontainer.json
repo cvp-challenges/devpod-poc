@@ -15,6 +15,5 @@
     }
   },
   "forwardPorts": [3000, 8089],
-  "remoteUser": "vscode",
-  "postCreateCommand": "/workspace/.devcontainer/scripts/init.sh"
+  "remoteUser": "vscode"
 }
