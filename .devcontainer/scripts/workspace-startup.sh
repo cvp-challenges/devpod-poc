@@ -1,10 +1,8 @@
 #!/bin/bash
+set -e
 
-# Create common directory and move existing files if not already done
 if [ ! -d "/workspace/common" ]; then
   mkdir -p /workspace/common
-  
-  # Move all existing files and folders to common
   for item in /workspace/*; do
     if [ -e "$item" ]; then
       basename_item=$(basename "$item")
@@ -15,7 +13,6 @@ if [ ! -d "/workspace/common" ]; then
   done
 fi
 
-# Only clone repositories if they do not exist or are empty
 if [ ! -d "/workspace/backend/.git" ] || [ -z "$(ls -A /workspace/backend 2>/dev/null)" ]; then
   rm -rf /workspace/backend
   git clone https://github.com/cvp-challenges/devpod-odos-backend.git /workspace/backend
