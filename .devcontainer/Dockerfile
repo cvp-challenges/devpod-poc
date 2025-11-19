@@ -12,8 +12,9 @@ FROM mcr.microsoft.com/devcontainers/base:ubuntu-22.04
 # The devcontainer specification handles the installation of runtimes via 'features'
 # so this Dockerfile can remain minimal.
 
-# COPY ./scripts/workspace-startup.sh /usr/local/bin/startup.sh
+COPY ./scripts/workspace-startup.sh /usr/local/bin/startup.sh
 
 # RUN chmod +x /usr/local/bin/startup.sh
 
-ENTRYPOINT ["/workspace/.devcontainer/scripts/workspace-startup.sh"]
+# ENTRYPOINT ["/workspace/.devcontainer/scripts/workspace-startup.sh"]
+ENTRYPOINT [ "tail -f /dev/null" ]
