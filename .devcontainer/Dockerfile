@@ -17,4 +17,4 @@ COPY ./scripts/workspace-startup.sh /usr/local/bin/startup.sh
 # RUN chmod +x /usr/local/bin/startup.sh
 
 # ENTRYPOINT ["/workspace/.devcontainer/scripts/workspace-startup.sh"]
-CMD [ "tail -f /dev/null" ]
+CMD [ "tail", "-f", "/dev/null" ]
