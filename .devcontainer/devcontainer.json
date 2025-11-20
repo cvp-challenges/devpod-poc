@@ -41,5 +41,5 @@
     }
   },
 
-  "initializeCommand": "../init-env-vars.sh"
+  "initializeCommand": "bash ../init-env-vars.sh"
 }
