@@ -8,9 +8,9 @@ services:
     environment:
       NODE_ENV: development
     volumes:
-      - workspace_data:/workspace
-      - yarn_cache:/home/vscode/.cache/yarn
-      - cypress_cache:/home/vscode/.cache/Cypress
+      - /workspace
+      - /home/vscode/.cache/yarn
+      - /home/vscode/.cache/Cypress
       - .:/workspace/.devcontainer:ro
       - ../.vscode:/workspace/.vscode:ro
     ports:
@@ -29,8 +29,8 @@ services:
     ports:
       - ${POSTGRES_PORT_MAPPING}
     volumes:
-      - pgdata:/var/lib/postgresql/data
-      - ../postgres:/docker-entrypoint-initdb.d
+      - /var/lib/postgresql/data
+      - ../postgres:/docker-entrypoint-initdb.d:ro
     networks:
       - shared-network
 
@@ -76,23 +76,12 @@ services:
     ports:
       - ${KEYCLOAK_PORT_MAPPING}
     volumes:
-      - keycloak_data:/opt/keycloak/data
-      - ../keycloak:/opt/keycloak/data/import
+      - /opt/keycloak/data
+      - ../keycloak:/opt/keycloak/data/import:ro
+      # - ../keycloak/theme:/opt/keycloak/themes/uscis
     command: start-dev --import-realm
     networks:
       - shared-network
-
-volumes:
-  pgdata:
-    driver: local
-  yarn_cache:
-    driver: local
-  cypress_cache:
-    driver: local
-  keycloak_data:
-    driver: local
-  workspace_data:
-    driver: local
 
 networks:
   shared-network:

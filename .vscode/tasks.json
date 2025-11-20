@@ -14,7 +14,7 @@
       }
     },
     {
-      "label": "Build Backend",
+      "label": "Springboot Build",
       "type": "shell",
       "command": "cd backend && mvn clean install -Dmaven.test.skip=true",
       "problemMatcher": [],
@@ -26,7 +26,7 @@
       }
     },
     {
-      "label": "Start Frontend",
+      "label": "NextJS UI",
       "type": "shell",
       "command": "cd frontend && yarn dev", // add "--inspect=0.0.0.0:9229" if using debugger
       "problemMatcher": [],
@@ -39,11 +39,11 @@
       }
     },
     {
-      "label": "Start Backend",
+      "label": "Springboot API",
       "type": "shell",
       "command": "cd backend && mvn spring-boot:run -Dmaven.test.skip=true",
       "problemMatcher": [],
-      "dependsOn": "Build Backend",
+      "dependsOn": "Springboot Build",
       "presentation": {
         "reveal": "always",
         "panel": "dedicated",
@@ -52,21 +52,24 @@
       }
     },
     {
-      "label": "Start",
-      "dependsOn": ["Start Backend", "Start Frontend"],
+      "label": "Start All",
+      "dependsOn": ["Springboot API", "NextJS UI"],
       "dependsOrder": "parallel"
     },
     {
-      "label": "Build",
-      "dependsOn": ["Yarn Install", "Build Backend"],
+      "label": "Build All",
+      "dependsOn": ["Yarn Install", "Springboot Build"],
       "dependsOrder": "parallel",
       "problemMatcher": [],
     },
     {
-      "label": "Initialize",
-      "dependsOn": ["Build", "Start"],
+      "label": "Start Services",
+      "dependsOn": ["Build All", "Start All"],
       "dependsOrder": "sequence",
-      "problemMatcher": []
+      "problemMatcher": [],
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
     }
   ]
 }
