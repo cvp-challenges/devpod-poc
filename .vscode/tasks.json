@@ -2,37 +2,71 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Start Frontend (Yarn)",
+      "label": "Yarn Install",
       "type": "shell",
-      "command": "cd frontend && yarn dev", // --inspect=0.0.0.0:9229
+      "command": "cd frontend && yarn install --frozen-lockfile",
       "problemMatcher": [],
-      "isBackground": true,
-      "group": "build",
       "presentation": {
         "reveal": "always",
-        "panel": "shared",
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      }
+    },
+    {
+      "label": "Build Backend",
+      "type": "shell",
+      "command": "cd backend && mvn clean install -Dmaven.test.skip=true",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      }
+    },
+    {
+      "label": "Start Frontend",
+      "type": "shell",
+      "command": "cd frontend && yarn dev", // add "--inspect=0.0.0.0:9229" if using debugger
+      "problemMatcher": [],
+      "dependsOn": "Yarn Install",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
         "showReuseMessage": false,
         "clear": false
       }
     },
     {
-      "label": "Start Backend (Maven)",
+      "label": "Start Backend",
       "type": "shell",
-      "command": "cd backend && mvn spring-boot:run -Dmaven.test.skip=true", // -Dspring-boot.run.jvmArguments='-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'
+      "command": "cd backend && mvn spring-boot:run -Dmaven.test.skip=true",
       "problemMatcher": [],
-      "isBackground": true,
-      "group": "build",
+      "dependsOn": "Build Backend",
       "presentation": {
         "reveal": "always",
-        "panel": "shared",
+        "panel": "dedicated",
         "showReuseMessage": false,
         "clear": false
       }
     },
     {
-      "label": "Start Services",
-      "dependsOn": ["Start Backend (Maven)", "Start Frontend (Yarn)"],
+      "label": "Start",
+      "dependsOn": ["Start Backend", "Start Frontend"],
       "dependsOrder": "parallel"
+    },
+    {
+      "label": "Build",
+      "dependsOn": ["Yarn Install", "Build Backend"],
+      "dependsOrder": "parallel",
+      "problemMatcher": [],
+    },
+    {
+      "label": "Initialize",
+      "dependsOn": ["Build", "Start"],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
     }
   ]
 }

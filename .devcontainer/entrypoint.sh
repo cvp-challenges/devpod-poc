@@ -26,16 +26,16 @@ while IFS= read -r -d '' gitdir; do
   git config --global --add safe.directory "$repo_dir" || true
 done
 
-# Install Frontend dependencies
-echo "📋 Installing frontend dependencies..."
-cd /workspace/frontend
-yarn install --frozen-lockfile
+# # Install Frontend dependencies
+# echo "📋 Installing frontend dependencies..."
+# cd /workspace/frontend
+# yarn install --frozen-lockfile
 
-# Backend prebuild check
-echo "🧱 Resolving backend Maven dependencies..."
-cd /workspace/backend
-mvn -q dependency:resolve
-mvn clean install -Dmaven.test.skip=true
+# # Backend prebuild check
+# echo "🧱 Resolving backend Maven dependencies..."
+# cd /workspace/backend
+# mvn -q dependency:resolve
+# mvn clean install -Dmaven.test.skip=true
 
-echo "✅ Environment ready! You can now run VS Code tasks to start services."
+echo "✅ Environment ready! You can now run VS Code tasks to build and start services."
 exec sleep infinity

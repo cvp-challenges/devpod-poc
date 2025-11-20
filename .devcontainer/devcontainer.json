@@ -34,5 +34,5 @@
     }
   },
 
-  "postAttachCommand": "code --run-task 'Start Services'"
+  "postAttachCommand": "code --run-task 'Initialize'"
 }
