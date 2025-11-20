@@ -3,11 +3,11 @@ set -e
 
 echo "🚀 DevPod workspace initializing..."
 
-# --- Initialize environment variables ---
-if [ -f "/workspace/init-env-vars.sh" ]; then
-    echo "🔧 Running environment variable initialization..."
-    source /workspace/init-env-vars.sh
-fi
+# # --- Initialize environment variables ---
+# if [ -f "/workspace/init-env-vars.sh" ]; then
+#     echo "🔧 Running environment variable initialization..."
+#     source /workspace/init-env-vars.sh
+# fi
 
 # --- Git global setup ---
 git config --global credential.helper 'cache --timeout=3600' || true

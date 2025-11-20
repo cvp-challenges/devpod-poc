@@ -39,5 +39,7 @@
         "dbaeumer.vscode-eslint"
       ]
     }
-  }
+  },
+
+  "initializeCommand": "../init-env-vars.sh"
 }
