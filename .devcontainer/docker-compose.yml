@@ -14,9 +14,11 @@ services:
       - /workspace
       - /home/vscode/.cache/yarn
       - /home/vscode/.cache/Cypress
-      - .:/workspace/.devcontainer:ro
-      - ../.vscode:/workspace/.vscode:ro
-      - ../.code-workspace:/workspace/.code-workspace:ro
+      - ../:/workspace:ro
+      # - .:/workspace/.devcontainer:ro
+      # - ../.vscode:/workspace/.vscode:ro
+      # - ../.code-workspace:/workspace/.code-workspace:ro
+      # - ../.*:/workspace:ro
     ports:
       - ${FRONTEND_PORT_MAPPING}
       - ${BACKEND_PORT_MAPPING}
@@ -52,12 +54,43 @@ services:
       PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
     networks:
       - shared-network
-    entrypoint: >
+    entrypoint: |
       /bin/sh -c '
-      echo "postgres:5432:$POSTGRES_DB:$POSTGRES_USER:$POSTGRES_PASSWORD" > /tmp/pgpassfile;
+      cat <<EOF > /tmp/pgpassfile
+      postgres:5432:${KEYCLOAK_DB}:${KEYCLOAK_DB_USER}:${KEYCLOAK_DB_PASSWORD}
+      postgres:5432:${POSTGRES_DB}:${POSTGRES_USER}:${POSTGRES_PASSWORD}
+      EOF
+
       chmod 600 /tmp/pgpassfile;
-      echo "{\"Servers\":{\"1\":{\"Name\":\"develpoment\",\"Group\":\"Servers\",\"Host\":\"postgres\",\"Port\":$POSTGRES_PORT,\"MaintenanceDB\":\"$POSTGRES_DB\",\"Username\":\"$POSTGRES_USER\",\"PassFile\":\"/tmp/pgpassfile\",\"SSLMode\":\"prefer\"}}}" > /pgadmin4/servers.json;
-      /entrypoint.sh'
+
+      cat <<EOF2 > /pgadmin4/servers.json
+      {
+        "Servers": {
+          "1": {
+            "Name": "Keycloak DB",
+            "Group": "Servers",
+            "Host": "postgres",
+            "Port": 5432,
+            "MaintenanceDB": "${KEYCLOAK_DB}",
+            "Username": "${KEYCLOAK_DB_USER}",
+            "PassFile": "/tmp/pgpassfile",
+            "SSLMode": "prefer"
+          },
+          "2": {
+            "Name": "Development DB",
+            "Group": "Servers",
+            "Host": "postgres",
+            "Port": 5432,
+            "MaintenanceDB": "${POSTGRES_DB}",
+            "Username": "${POSTGRES_USER}",
+            "PassFile": "/tmp/pgpassfile",
+            "SSLMode": "prefer"
+          }
+        }
+      }
+      EOF2
+
+      exec /entrypoint.sh'
 
   # Keycloak Authentication Service
   keycloak:
