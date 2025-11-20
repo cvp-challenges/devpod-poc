@@ -22,6 +22,7 @@ services:
       - ../.code-workspace:/workspace/.code-workspace:ro
       - ../.gitattributes:/workspace/.gitattributes
       - ../.gitignore:/workspace/.gitignore
+      - ../init-env-vars.sh:/workspace/init-env-vars.sh
     ports:
       - ${FRONTEND_PORT_MAPPING}
       - ${BACKEND_PORT_MAPPING}
