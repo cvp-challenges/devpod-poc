@@ -12,6 +12,9 @@ FROM mcr.microsoft.com/devcontainers/base:ubuntu-22.04
 # The devcontainer specification handles the installation of runtimes via 'features'
 # so this Dockerfile can remain minimal.
 
+RUN mkdir -p /home/vscode/.cache/yarn /home/vscode/.cache/Cypress && \
+    chown -R vscode:vscode /home/vscode/.cache
+
 USER vscode
 
 WORKDIR /workspace

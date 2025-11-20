@@ -10,6 +10,7 @@ services:
     volumes:
       - workspace_data:/workspace
       - yarn_cache:/home/vscode/.cache/yarn
+      - cypress_cache:/home/vscode/.cache/Cypress
       - .:/workspace/.devcontainer:ro
       - ../.vscode:/workspace/.vscode:ro
     ports:
@@ -85,6 +86,8 @@ volumes:
   pgdata:
     driver: local
   yarn_cache:
+    driver: local
+  cypress_cache:
     driver: local
   keycloak_data:
     driver: local
