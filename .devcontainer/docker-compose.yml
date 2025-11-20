@@ -4,6 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    working_dir: /workspace
     depends_on:
       - postgres
       - keycloak
