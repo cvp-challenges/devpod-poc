@@ -3,39 +3,29 @@ set -e
 
 echo "🚀 DevPod workspace initializing..."
 
+# Ensure git works in /workspace and child dirs
+git config --global --add safe.directory /workspace
+git config --global --add safe.directory /workspace/backend
+git config --global --add safe.directory /workspace/frontend
+
+# Optionally apply global configs (DevPod may inject identity)
+# if [ -n "$GIT_COMMITTER_NAME" ]; then
+#   git config --global user.name "$GIT_COMMITTER_NAME"
+# fi
+# if [ -n "$GIT_COMMITTER_EMAIL" ]; then
+#   git config --global user.email "$GIT_COMMITTER_EMAIL"
+# fi
+
 cd /workspace
 
 # --- Repo setup ---
 if [ ! -d "frontend/.git" ]; then
-  echo "📦 Cloning frontend..."
   git clone "$FRONTEND_REPO" frontend
 fi
 
 if [ ! -d "backend/.git" ]; then
-  echo "📦 Cloning backend..."
   git clone "$BACKEND_REPO" backend
 fi
 
-# # --- Dependencies ---
-# echo "📦 Installing dependencies..."
-# npm install --prefix frontend >/dev/null
-
-# # Optional: Build Spring Boot to speed hot reload
-# if [ -f backend/mvnw ]; then
-#   echo "🔨 Building backend..."
-#   cd backend && ./mvnw clean package -DskipTests >/dev/null && cd ..
-# fi
-
-# # --- Run servers concurrently ---
-# echo "⚙️  Starting frontend & backend..."
-
-# cd /workspace
-# exec bash -c '
-#   trap "exit" INT TERM
-#   trap "kill 0" EXIT
-#   # (cd backend && ./mvnw spring-boot:run) &
-#   # (cd frontend && npm run dev) &
-#   wait
-# '
-
-tail -f /dev/null
+# tail -f /dev/null
+exec sleep infinity

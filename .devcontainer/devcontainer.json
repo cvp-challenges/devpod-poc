@@ -3,6 +3,18 @@
   "dockerComposeFile": "docker-compose.yml",
   "service": "workspace",
   "workspaceFolder": "/workspace",
+  "runServices": ["workspace", "postgres", "pgadmin"],
+  "shutdownAction": "stopCompose",
+
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "17"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20",
+      "installYarnUsingApt": true
+    }
+  },
 
   "customizations": {
     "vscode": {
@@ -13,26 +25,36 @@
         "git.autoRepositoryDetection": true,
         "git.scanRepositories": ["/workspace"]
       },
-      "extensions": []
+      "extensions": [],
+      "tasks": {
+        "version": "2.0.0",
+        "tasks": [
+          {
+            "label": "Install frontend dependencies",
+            "type": "shell",
+            "command": "cd frontend && yarn install",
+            "presentation": { "panel": "new", "reveal": "always" },
+            "problemMatcher": []
+          },
+          {
+            "label": "Run frontend (Next.js)",
+            "type": "shell",
+            "command": "cd frontend && yarn dev",
+            "dependsOn": "Install frontend dependencies",
+            "isBackground": true,
+            "presentation": { "panel": "dedicated", "reveal": "always" },
+            "problemMatcher": []
+          }
+        ]
+      }
     }
-  },
+  }
 
-  "remoteEnv": {
-    "GIT_COMMITTER_NAME": "${localEnv:GIT_COMMITTER_NAME}",
-    "GIT_COMMITTER_EMAIL": "${localEnv:GIT_COMMITTER_EMAIL}"
-  },
-
-  // "forwardPorts": [3000, 8089],
-
-  // "features": {
-  //   "ghcr.io/devcontainers/features/java:1": {
-  //     "version": "17"
-  //   },
-  //   "ghcr.io/devcontainers/features/node:1": {
-  //     "version": "20"
-  //   }
-  // },
-
-  "runServices": ["workspace", "postgres", "pgadmin"],
-  "shutdownAction": "stopCompose"
+  // "remoteEnv": {
+  //   "GIT_COMMITTER_NAME": "${localEnv:GIT_COMMITTER_NAME}",
+  //   "GIT_COMMITTER_EMAIL": "${localEnv:GIT_COMMITTER_EMAIL}",
+  //   "GIT_AUTHOR_NAME": "${localEnv:GIT_AUTHOR_NAME}",
+  //   "GIT_AUTHOR_EMAIL": "${localEnv:GIT_AUTHOR_EMAIL}",
+  //   "SSH_AUTH_SOCK": "${localEnv:SSH_AUTH_SOCK}"
+  // }
 }

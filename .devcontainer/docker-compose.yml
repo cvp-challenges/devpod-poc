@@ -10,6 +10,7 @@ services:
     volumes:
       - workspace_data:/workspace
       - .:/workspace/.devcontainer:ro
+      - yarn_cache:/home/vscode/.cache/yarn
     ports:
       - ${FRONTEND_PORT_MAPPING}
       - ${BACKEND_PORT_MAPPING}
@@ -81,6 +82,8 @@ services:
 
 volumes:
   pgdata:
+    driver: local
+  yarn_cache:
     driver: local
   keycloak_data:
     driver: local
