@@ -16,12 +16,24 @@ git config --global --add safe.directory /workspace || true
 git config --global credential.helper 'cache --timeout=3600' || true
 
 clone_or_update() {
-  local dir=$1 repo=$2 ref=$3 path=/workspace/$dir
+  local dir="${1:-}" repo="${2:-}" ref="${3:-}" path="/workspace/$dir"
+
+  if [ -z "$dir" ] || [ -z "$repo" ]; then
+    echo "⚠️  Missing parameters for clone_or_update(): dir='$dir', repo='$repo'"
+    return 0
+  fi
+
   if [ ! -d "$path/.git" ]; then
-    echo "📦 Cloning $repo ..."
+    echo "📦 Cloning $repo into $path ..."
     git clone "$repo" "$path"
   fi
-  (cd "$path" && git fetch origin && git checkout "$ref" && git pull --ff-only || true)
+
+  (
+    cd "$path"
+    git fetch origin || true
+    [ -n "$ref" ] && git checkout "$ref" || true
+    git pull --ff-only || true
+  )
 }
 
 clone_or_update frontend "$FRONTEND_REPO" "$FRONTEND_REF"
