@@ -29,11 +29,13 @@ fi
 # # --- Run servers concurrently ---
 # echo "⚙️  Starting frontend & backend..."
 
-cd /workspace
-exec bash -c '
-  trap "exit" INT TERM
-  trap "kill 0" EXIT
-  # (cd backend && ./mvnw spring-boot:run) &
-  # (cd frontend && npm run dev) &
-  wait
-'
+# cd /workspace
+# exec bash -c '
+#   trap "exit" INT TERM
+#   trap "kill 0" EXIT
+#   # (cd backend && ./mvnw spring-boot:run) &
+#   # (cd frontend && npm run dev) &
+#   wait
+# '
+
+tail -f /dev/null

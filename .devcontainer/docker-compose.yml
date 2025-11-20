@@ -16,6 +16,7 @@ services:
     networks:
       - shared-network
     command: ["/bin/bash", "/workspace/.devcontainer/entrypoint.sh"]
+    tty: true
 
   # PostgreSQL Database Service
   postgres:
