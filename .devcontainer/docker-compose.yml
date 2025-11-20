@@ -14,11 +14,11 @@ services:
       - /workspace
       - /home/vscode/.cache/yarn
       - /home/vscode/.cache/Cypress
-      - ../:/workspace:ro
-      # - .:/workspace/.devcontainer:ro
-      # - ../.vscode:/workspace/.vscode:ro
-      # - ../.code-workspace:/workspace/.code-workspace:ro
-      # - ../.*:/workspace:ro
+      - .:/workspace/.devcontainer:ro
+      - ../.vscode:/workspace/.vscode:ro
+      - ../.code-workspace:/workspace/.code-workspace:ro
+      - ../.gitattributes:/workspace/.gitattributes:ro
+      - ../.gitignore:/workspace/.gitignore:ro
     ports:
       - ${FRONTEND_PORT_MAPPING}
       - ${BACKEND_PORT_MAPPING}
