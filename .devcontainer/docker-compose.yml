@@ -23,7 +23,7 @@ services:
 
   # PostgreSQL Database Service
   postgres:
-    image: postgres:latest
+    image: postgres:15
     restart: unless-stopped
     env_file: .env
     ports:
