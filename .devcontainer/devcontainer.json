@@ -3,7 +3,6 @@
   "dockerComposeFile": "docker-compose.yml",
   "service": "workspace",
   "workspaceFolder": "/workspace",
-  // "runServices": ["workspace", "postgres", "pgadmin"],
   "shutdownAction": "stopCompose",
 
   "features": {
@@ -34,5 +33,5 @@
     }
   },
 
-  "postAttachCommand": "code --run-task 'Start Both Services'"
+  "postAttachCommand": "code --run-task 'Start Services'"
 }

@@ -9,8 +9,9 @@ services:
       NODE_ENV: development
     volumes:
       - workspace_data:/workspace
-      - .:/workspace/.devcontainer:ro
       - yarn_cache:/home/vscode/.cache/yarn
+      - .:/workspace/.devcontainer:ro
+      - ../.vscode:/workspace/.vscode:ro
     ports:
       - ${FRONTEND_PORT_MAPPING}
       - ${BACKEND_PORT_MAPPING}
