@@ -39,5 +39,5 @@
     }
   },
 
-  "initializeCommand": "docker run --rm -v ${localWorkspaceFolder}:/workspace -w /workspace ubuntu:latest bash ./init-env-vars.sh"
+  // "initializeCommand": "docker run --rm -v ${localWorkspaceFolder}:/workspace -w /workspace ubuntu:latest bash ./init-env-vars.sh"
 }
