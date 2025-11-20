@@ -4,6 +4,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    depends_on:
+      - postgres
+      - keycloak
     env_file: .env
     environment:
       NODE_ENV: development
@@ -13,6 +16,7 @@ services:
       - /home/vscode/.cache/Cypress
       - .:/workspace/.devcontainer:ro
       - ../.vscode:/workspace/.vscode:ro
+      - ../.code-workspace:/workspace/.code-workspace:ro
     ports:
       - ${FRONTEND_PORT_MAPPING}
       - ${BACKEND_PORT_MAPPING}
