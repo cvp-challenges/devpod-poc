@@ -1,31 +1,50 @@
 #!/bin/bash
-set -e
+set -Eeuo pipefail
 
-echo "🚀 DevPod workspace initializing..."
+echo "⚙️  Setting up workspace..."
 
-# Ensure git works in /workspace and child dirs
-git config --global --add safe.directory /workspace
-git config --global --add safe.directory /workspace/backend
-git config --global --add safe.directory /workspace/frontend
+FRONTEND_REF="${FRONTEND_REF:-main}"
+BACKEND_REF="${BACKEND_REF:-main}"
 
-# Optionally apply global configs (DevPod may inject identity)
-# if [ -n "$GIT_COMMITTER_NAME" ]; then
-#   git config --global user.name "$GIT_COMMITTER_NAME"
-# fi
-# if [ -n "$GIT_COMMITTER_EMAIL" ]; then
-#   git config --global user.email "$GIT_COMMITTER_EMAIL"
-# fi
-
-cd /workspace
-
-# --- Repo setup ---
-if [ ! -d "frontend/.git" ]; then
-  git clone "$FRONTEND_REPO" frontend
+# Load local .env if present
+if [ -f "/workspace/.devcontainer/.env" ]; then
+  source /workspace/.devcontainer/.env
 fi
 
-if [ ! -d "backend/.git" ]; then
-  git clone "$BACKEND_REPO" backend
+# Git setup
+git config --global --add safe.directory /workspace || true
+git config --global credential.helper 'cache --timeout=3600' || true
+
+clone_or_update() {
+  local dir=$1 repo=$2 ref=$3 path=/workspace/$dir
+  if [ ! -d "$path/.git" ]; then
+    echo "📦 Cloning $repo ..."
+    git clone "$repo" "$path"
+  fi
+  (cd "$path" && git fetch origin && git checkout "$ref" && git pull --ff-only || true)
+}
+
+clone_or_update frontend "$FRONTEND_REPO" "$FRONTEND_REF"
+clone_or_update backend "$BACKEND_REPO" "$BACKEND_REF"
+
+# Install deps incrementally
+if [ ! -d "/workspace/frontend/node_modules" ] || [ "/workspace/frontend/yarn.lock" -nt "/workspace/frontend/node_modules" ]; then
+  echo "📋 Installing frontend deps..."
+  (cd /workspace/frontend && yarn install --frozen-lockfile)
+else
+  echo "✅ Frontend up to date."
 fi
 
-# tail -f /dev/null
+# Backend prebuild check
+if [ -f /workspace/backend/pom.xml ]; then
+  echo "🧱 Backend Maven build check..."
+  (cd /workspace/backend && mvn -q dependency:resolve)
+# elif [ -f /workspace/backend/build.gradle ] || [ -f /workspace/backend/build.gradle.kts ]; then
+#   echo "🧱 Backend Gradle build check..."
+#   (cd /workspace/backend && gradle -q dependencies > /dev/null)
+fi
+
+echo "✅ Environment ready! You can now run VS Code tasks to start services."
+
+# Keep container alive
 exec sleep infinity

@@ -1,0 +1,38 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Frontend (Yarn)",
+      "type": "shell",
+      "command": "cd frontend && yarn dev", // --inspect=0.0.0.0:9229
+      "problemMatcher": [],
+      "isBackground": true,
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": false
+      }
+    },
+    {
+      "label": "Start Backend (Maven)",
+      "type": "shell",
+      "command": "cd backend && mvn spring-boot:run", // -Dspring-boot.run.jvmArguments='-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'
+      "problemMatcher": [],
+      "isBackground": true,
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": false
+      }
+    },
+    {
+      "label": "Start Services",
+      "dependsOn": ["Start Backend (Maven)", "Start Frontend (Yarn)"],
+      "dependsOrder": "parallel"
+    }
+  ]
+}
