@@ -16,14 +16,6 @@ git config --global --add safe.directory /workspace || true
 # git config --global --add safe.directory /workspace/frontend
 git config --global credential.helper 'cache --timeout=3600' || true
 
-# # Optionally apply global configs (DevPod may inject identity)
-# if [ -n "$GIT_COMMITTER_NAME" ]; then
-#   git config --global user.name "$GIT_COMMITTER_NAME"
-# fi
-# if [ -n "$GIT_COMMITTER_EMAIL" ]; then
-#   git config --global user.email "$GIT_COMMITTER_EMAIL"
-# fi
-
 cd /workspace
 
 # --- Repo setup ---
