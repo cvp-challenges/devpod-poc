@@ -18,13 +18,11 @@
 
   "customizations": {
     "vscode": {
-      // "workspace": ".code-workspace",
       "settings": {
         "terminal.integrated.shell.linux": "/bin/bash",
         "git.confirmSync": false,
         "git.detectSubmodules": false,
-        "git.autoRepositoryDetection": "subFolders",
-        "git.detectNestedRepositories": true,
+        "git.autoRepositoryDetection": true,
         "git.openRepositoryInParentFolders": "always",
         "git.scanRepositories": [
           "/workspace",
