@@ -8,7 +8,7 @@ services:
     depends_on:
       - postgres
       - keycloak
-    env_file: ../.env
+    env_file: .env
     environment:
       NODE_ENV: development
     volumes:
@@ -35,7 +35,7 @@ services:
   postgres:
     image: postgres:15
     restart: unless-stopped
-    env_file: ../.env
+    env_file: .env
     ports:
       - ${POSTGRES_PORT_MAPPING}
     volumes:
@@ -52,7 +52,7 @@ services:
       - postgres
     ports:
       - $PGADMIN_PORT_MAPPING
-    env_file: ../.env
+    env_file: .env
     environment:
       PGADMIN_CONFIG_SERVER_MODE: "False"
       PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
@@ -102,7 +102,7 @@ services:
     depends_on:
       - postgres
     restart: unless-stopped
-    env_file: ../.env
+    env_file: .env
     environment:
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgres:${POSTGRES_PORT}/${KEYCLOAK_DB}
