@@ -3,8 +3,5 @@
     { "path": "." },
     { "path": "frontend" },
     { "path": "backend" }
-  ],
-  "settings": {
-    "git.autoRepositoryDetection": true
-  }
+  ]
 }
