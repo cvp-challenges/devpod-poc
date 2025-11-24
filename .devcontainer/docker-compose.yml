@@ -5,9 +5,6 @@ services:
       context: .
       dockerfile: Dockerfile
     working_dir: /workspace
-    depends_on:
-      - postgres
-      - keycloak
     environment:
       NODE_ENV: development
     volumes:
