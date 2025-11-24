@@ -30,6 +30,7 @@ if [ ! -f $ENV ]; then
   KEYCLOAK_REALM=fifer-audit
   KEYCLOAK_REALM_DISPLAY='"Fifer AUDIT"'
   KEYCLOAK_URL=http://localhost:$KEYCLOAK_PORT
+  SIGNING_TOKEN=$(randomPassword 32)
 
   # Github Repo Urls to clone
   echo "FRONTEND_REPO_URL=https://github.com/cvp-challenges/devpod-odos-frontend" >> $ENV
@@ -43,7 +44,9 @@ if [ ! -f $ENV ]; then
   echo "PGADMIN_PORT_MAPPING=$PGADMIN_PORT:80" >> $ENV
 
   # Authentication signing token
-  echo "SIGNING_TOKEN=$(randomPassword 32)" >> $ENV
+  echo "NEXTAUTH_URL=$NEXTAUTH_URL" >> $ENV
+  echo "NEXTAUTH_SECRET=$SIGNING_TOKEN" >> $ENV
+  echo "JWT_TOKEN_SECRET=$SIGNING_TOKEN" >> $ENV
 
   # Localstack Configuration (AWS Emulator)
   echo "AWS_ACCESS_KEY_ID=$ACCESS_KEY" >> $ENV
@@ -53,10 +56,14 @@ if [ ! -f $ENV ]; then
 
   # PostgreSQL Configuration
   echo "POSTGRES_DB=postgres" >> $ENV
-  echo "POSTGRES_HOST=localhost" >> $ENV
+  echo "POSTGRES_HOST=postgres" >> $ENV
   echo "POSTGRES_PORT=$POSTGRES_PORT" >> $ENV
   echo "POSTGRES_USER=postgres" >> $ENV
   echo "POSTGRES_PASSWORD=$(randomPassword 20)" >> $ENV
+
+  # APP DB Configuration
+  echo "APP_DB_USER=appuser" >> $ENV
+  echo "APP_DB_PASSWORD=$(randomPassword 20)" >> $ENV
 
   # Keycloak Configuration
   echo "KEYCLOAK_DB=keycloak" >> $ENV
@@ -81,7 +88,10 @@ if [ ! -f $ENV ]; then
 
   # SMTP4Dev Configuration
   echo "SMTP_SERVER_PORT=$SMTP_SERVER_PORT" >> $ENV
-  echo "SMTP_SERVER_HOST=localhost" >> $ENV
+  echo "SMTP_SERVER_HOST=smtp" >> $ENV
+
+  # Kafka Configuration
+  echo "KAFKA_BOOTSTRAP_SERVERS=kafka:9092" >> .env
 
   echo "✅ Default .env file created"
 fi

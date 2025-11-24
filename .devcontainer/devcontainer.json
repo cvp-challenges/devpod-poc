@@ -20,6 +20,10 @@
     "vscode": {
       "workspace": ".code-workspace",
       "settings": {
+        "editor.tabSize": 2,
+        "editor.fontSize": 18,
+        "files.encoding": "utf8",
+        "files.eol": "\n",
         "terminal.integrated.shell.linux": "/bin/bash",
         "git.confirmSync": false,
         "git.detectSubmodules": false,
@@ -39,7 +43,7 @@
         "dbaeumer.vscode-eslint"
       ]
     }
-  },
+  }
 
   //"initializeCommand": "docker run --rm -v ${localWorkspaceFolder}:/workspace -w /workspace ubuntu:latest bash ./init-env-vars.sh"
 }

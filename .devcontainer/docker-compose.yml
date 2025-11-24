@@ -24,8 +24,12 @@ services:
       - ../.gitignore:/workspace/.gitignore
       - ../init-env-vars.sh:/workspace/init-env-vars.sh
     ports:
-      - ${FRONTEND_PORT_MAPPING}
-      - ${BACKEND_PORT_MAPPING}
+      - $FRONTEND_PORT_MAPPING
+      - $BACKEND_PORT_MAPPING
+      - $KEYCLOAK_PORT_MAPPING
+      - $PGADMIN_PORT_MAPPING
+      - $KAFKA_PORT_MAPPING
+      - $SMTP_PORT_MAPPING
     networks:
       - shared-network
     command: ["/bin/bash", "/workspace/.devcontainer/entrypoint.sh"]
@@ -37,7 +41,7 @@ services:
     restart: unless-stopped
     env_file: .env
     ports:
-      - ${POSTGRES_PORT_MAPPING}
+      - $POSTGRES_PORT_MAPPING
     volumes:
       - /var/lib/postgresql/data
       - ../postgres:/docker-entrypoint-initdb.d:ro
@@ -115,7 +119,7 @@ services:
       KC_METRICS_ENABLED: true
       KC_HEALTH_ENABLED: true
     ports:
-      - ${KEYCLOAK_PORT_MAPPING}
+      - $KEYCLOAK_PORT_MAPPING
     volumes:
       - /opt/keycloak/data
       - ../keycloak:/opt/keycloak/data/import:ro
@@ -123,6 +127,77 @@ services:
     command: start-dev --import-realm
     networks:
       - shared-network
+
+  smtp:
+    container_name: smtp
+    image: rnwood/smtp4dev:v3
+    restart: always
+    ports:
+      - $SMTP_PORT_MAPPING
+      - '25:25'
+      - '143:143'
+    networks:
+      - shared-network
+    env_file: .env
+    environment:
+      - ServerOptions__Urls=http://*:80
+      - ServerOptions__HostName=smtp
+      - ServerOptions__DisableSanitizeHtml=true
+
+  kafka:
+    container_name: kafka
+    image: bitnamilegacy/kafka
+    ports:
+      - 9092:9092
+      - 29092:29092
+    networks:
+      - shared-network
+    env_file: .env
+    environment:
+      KAFKA_CFG_NODE_ID: 1
+      KAFKA_CFG_PROCESS_ROLES: broker,controller
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,PLAINTEXT_INTERNAL://:29092,CONTROLLER://:9093
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: PLAINTEXT_INTERNAL
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_KRAFT_CLUSTER_ID: "odos-kafka"
+
+  # connect:
+  #   container_name: connect
+  #   image: ghcr.io/cvpcorp/kafka-connect:1.0.2
+  #   ports:
+  #     - 8083:8083
+  #   networks:
+  #     - shared-network
+  #   env_file: .env
+  #   environment:
+  #     FORM_UPLOAD_BUCKET: ${FORM_UPLOAD_BUCKET}
+  #     FORM_INBOUND_TOPIC: ${FORM_INBOUND_TOPIC}
+  #     POSTGRES_USER: ${POSTGRES_USER}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  #     DATA_DB_USER: ${DATA_DB_USER}
+  #     DATA_DB_PASSWORD: ${DATA_DB_PASSWORD}
+  #   volumes:
+  #     - ../kafa/connect-distributed.properties:/opt/bitnami/kafka/config/connect-distributed.properties
+
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui
+    depends_on:
+      - kafka
+      # - connect
+    ports:
+      - $KAFKA_PORT_MAPPING
+    networks:
+      - shared-network
+    env_file: .env
+    environment:
+      DYNAMIC_CONFIG_ENABLED: "true"
+    volumes:
+      - ../kafa/ui.config.yml:/etc/kafkaui/dynamic_config.yaml
 
 networks:
   shared-network:

@@ -3,5 +3,22 @@
     { "path": "." },
     { "path": "frontend" },
     { "path": "backend" }
-  ]
+  ],
+  "settings": {
+    "editor.tabSize": 2,
+    "editor.fontSize": 18,
+    "files.encoding": "utf8",
+    "files.eol": "\n",
+    "terminal.integrated.shell.linux": "/bin/bash",
+    "git.confirmSync": false,
+    "git.detectSubmodules": false,
+    "git.autoRepositoryDetection": "subFolders",
+    "git.detectNestedRepositories": true,
+    "git.openRepositoryInParentFolders": "always",
+    "git.scanRepositories": [
+      "/workspace",
+      "/workspace/frontend",
+      "/workspace/backend"
+    ]
+  }
 }
