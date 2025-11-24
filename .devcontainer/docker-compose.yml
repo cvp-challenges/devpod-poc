@@ -26,10 +26,6 @@ services:
     ports:
       - $FRONTEND_PORT_MAPPING
       - $BACKEND_PORT_MAPPING
-      # - $KEYCLOAK_PORT_MAPPING
-      # - $PGADMIN_PORT_MAPPING
-      # - $KAFKA_PORT_MAPPING
-      # - $SMTP_PORT_MAPPING
     networks:
       - shared-network
     command: ["/bin/bash", "/workspace/.devcontainer/entrypoint.sh"]
