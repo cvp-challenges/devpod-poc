@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     env_file: ../.env
     ports:
-      - $POSTGRES_PORT_MAPPING
+      - 5432:5432
     volumes:
       - /var/lib/postgresql/data
       - ../postgres:/docker-entrypoint-initdb.d:ro
@@ -19,7 +19,7 @@ services:
     depends_on:
       - postgres
     ports:
-      - $PGADMIN_PORT_MAPPING
+      - 8099:80
     env_file: ../.env
     environment:
       PGADMIN_CONFIG_SERVER_MODE: "False"
@@ -83,7 +83,7 @@ services:
       KC_METRICS_ENABLED: true
       KC_HEALTH_ENABLED: true
     ports:
-      - $KEYCLOAK_PORT_MAPPING
+      - 8080:8080
     volumes:
       - /opt/keycloak/data
       - ../keycloak:/opt/keycloak/data/import:ro
@@ -97,9 +97,9 @@ services:
     image: rnwood/smtp4dev:v3
     restart: always
     ports:
-      - $SMTP_PORT_MAPPING
-      - '25:25'
-      - '143:143'
+      - 5000:80
+      - 25:25
+      - 143:143
     networks:
       - shared-network
     env_file: ../.env
@@ -154,7 +154,7 @@ services:
       - kafka
       # - connect
     ports:
-      - $KAFKA_PORT_MAPPING
+      - 8085:8080
     networks:
       - shared-network
     env_file: ../.env

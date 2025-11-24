@@ -33,15 +33,8 @@ if [ ! -f $ENV ]; then
   SIGNING_TOKEN=$(randomPassword 32)
 
   # Github Repo Urls to clone
-  echo "FRONTEND_REPO_URL=https://github.com/cvp-challenges/devpod-odos-frontend" >> $ENV
-  echo "BACKEND_REPO_URL=https://github.com/cvp-challenges/devpod-odos-backend" >> $ENV
-
-  # External Port to container port mappings
-  echo "FRONTEND_PORT_MAPPING=$FRONTEND_PORT:3000" >> $ENV
-  echo "POSTGRES_PORT_MAPPING=$POSTGRES_PORT:5432" >> $ENV
-  echo "KEYCLOAK_PORT_MAPPING=$KEYCLOAK_PORT:8080" >> $ENV
-  echo "BACKEND_PORT_MAPPING=$BACKEND_PORT:8089" >> $ENV
-  echo "PGADMIN_PORT_MAPPING=$PGADMIN_PORT:80" >> $ENV
+  echo "FRONTEND_REPO=https://github.com/cvp-challenges/devpod-odos-frontend" >> $ENV
+  echo "BACKEND_REPO=https://github.com/cvp-challenges/devpod-odos-backend" >> $ENV
 
   # Authentication signing token
   echo "NEXTAUTH_URL=$NEXTAUTH_URL" >> $ENV
@@ -64,6 +57,10 @@ if [ ! -f $ENV ]; then
   # APP DB Configuration
   echo "APP_DB_USER=appuser" >> $ENV
   echo "APP_DB_PASSWORD=$(randomPassword 20)" >> $ENV
+
+  # Data DB Configuration
+  echo "DATA_DB_USER=appuser" >> $ENV
+  echo "DATA_DB_PASSWORD=$(randomPassword 20)" >> $ENV
 
   # Keycloak Configuration
   echo "KEYCLOAK_DB=keycloak" >> $ENV
@@ -92,6 +89,8 @@ if [ ! -f $ENV ]; then
 
   # Kafka Configuration
   echo "KAFKA_BOOTSTRAP_SERVERS=kafka:9092" >> .env
+  echo "FORM_UPLOAD_BUCKET=formuploads" >> .env
+  echo "FORM_INBOUND_TOPIC=form.inbound" >> .env
 
   echo "✅ Default .env file created"
 fi
