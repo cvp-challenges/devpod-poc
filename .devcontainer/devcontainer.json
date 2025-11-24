@@ -43,7 +43,9 @@
         "dbaeumer.vscode-eslint"
       ]
     }
-  }
+  },
+
+  "forwardPorts": [5000, 8080, 8085, 8099]
 
   //"initializeCommand": "docker run --rm -v ${localWorkspaceFolder}:/workspace -w /workspace ubuntu:latest bash ./init-env-vars.sh"
 }
