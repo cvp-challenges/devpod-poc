@@ -20,8 +20,12 @@ services:
       - ../.gitignore:/workspace/.gitignore
       - ../init-env-vars.sh:/workspace/init-env-vars.sh
     ports:
-      - $FRONTEND_PORT_MAPPING
-      - $BACKEND_PORT_MAPPING
+      - 3000:3000 # Next UI
+      - 5000:5000 # SMTP
+      - 8080:8080 # Keycloak
+      - 8085:8085 # Kafka
+      - 8089:8089 # Springboot
+      - 8099:8099 # PgAdmin      
     networks:
       - shared-network
     command: ["/bin/bash", "/workspace/.devcontainer/entrypoint.sh"]
