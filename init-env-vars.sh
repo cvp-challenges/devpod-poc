@@ -88,9 +88,9 @@ if [ ! -f $ENV ]; then
   echo "SMTP_SERVER_HOST=smtp" >> $ENV
 
   # Kafka Configuration
-  echo "KAFKA_BOOTSTRAP_SERVERS=kafka:9092" >> .env
-  echo "FORM_UPLOAD_BUCKET=formuploads" >> .env
-  echo "FORM_INBOUND_TOPIC=form.inbound" >> .env
+  echo "KAFKA_BOOTSTRAP_SERVERS=kafka:9092" >> $ENV
+  echo "FORM_UPLOAD_BUCKET=formuploads" >> $ENV
+  echo "FORM_INBOUND_TOPIC=form.inbound" >> $ENV
 
   echo "✅ Default .env file created"
 fi
