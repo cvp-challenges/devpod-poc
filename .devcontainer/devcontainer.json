@@ -6,6 +6,7 @@
   "shutdownAction": "stopCompose",
 
   "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     "ghcr.io/devcontainers/features/java:1": {
       "version": "17",
       "installMaven": true
@@ -37,10 +38,15 @@
         ]
       },
       "extensions": [
+        "esbenp.prettier-vscode",
+        "ms-azuretools.vscode-docker",
         "vscjava.vscode-java-pack",
         "vscjava.vscode-spring-boot-dashboard",
         "ms-vscode.js-debug",
-        "dbaeumer.vscode-eslint"
+        "dbaeumer.vscode-eslint",
+        "saoudrizwan.claude-dev",
+        "rooveterinaryinc.roo-cline",
+        "gydunhn.typescript-essentials"
       ]
     }
   }

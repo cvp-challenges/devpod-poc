@@ -3,10 +3,18 @@ set -e
 
 echo "🚀 DevPod workspace initializing..."
 
+cd /workspace
+
+# Check if .env exists
+if [ ! -f ".env" ]; then
+  ./init-env-vars.sh  
+fi
+
+# export all env variables
+export $(cat .env | grep -v '^#' | xargs)
+
 # --- Git global setup ---
 git config --global credential.helper 'cache --timeout=3600' || true
-
-cd /workspace
 
 # --- Repo setup ---
 if [ ! -d "frontend/.git" ]; then
@@ -25,6 +33,15 @@ while IFS= read -r -d '' gitdir; do
   echo "   ➕ Safe: $repo_dir"
   git config --global --add safe.directory "$repo_dir" || true
 done
+
+# Start Docker daemon
+dockerd-entrypoint.sh &
+
+# Give Docker a few seconds to initialize
+sleep 5
+
+# Start Docker Compose stack
+docker-compose -f ./common/services.yml up -d
 
 echo "✅ Environment ready! You can now run VS Code tasks to build and start services."
 exec sleep infinity
