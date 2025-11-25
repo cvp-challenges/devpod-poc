@@ -31,10 +31,6 @@ if [ ! -f $ENV ]; then
   KEYCLOAK_URL=http://localhost:$KEYCLOAK_PORT
   SIGNING_TOKEN=$(randomPassword 32)
 
-  # Github Repo Urls to clone
-  echo "FRONTEND_REPO=\"https://github.com/cvp-challenges/devpod-odos-frontend\"" >> $ENV
-  echo "BACKEND_REPO=\"https://github.com/cvp-challenges/devpod-odos-backend\"" >> $ENV
-
   # Authentication signing token
   echo "NEXTAUTH_URL=$NEXTAUTH_URL" >> $ENV
   echo "NEXTAUTH_SECRET=$SIGNING_TOKEN" >> $ENV
@@ -103,11 +99,11 @@ git config --global credential.helper 'cache --timeout=3600' || true
 echo "🚀 Cloning Repositories..."
 
 if [ ! -d "frontend/.git" ]; then
-  git clone "$FRONTEND_REPO" /workspace/frontend
+  git clone https://github.com/cvp-challenges/devpod-odos-frontend /workspace/frontend
 fi
 
 if [ ! -d "backend/.git" ]; then
-  git clone "$BACKEND_REPO" /workspace/backend
+  git clone https://github.com/cvp-challenges/devpod-odos-backend /workspace/backend
 fi
 
 echo "🔒 Marking repositories as safe..."
