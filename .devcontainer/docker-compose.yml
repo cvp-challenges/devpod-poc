@@ -9,10 +9,9 @@ services:
     environment:
       NODE_ENV: development
     volumes:
-      - workspace-data:/workspace
+      - ..:/workspace:ro
       # - /home/vscode/.cache/yarn
       # - /home/vscode/.cache/Cypress
-      # - devpod-dind-data:/var/lib/docker
     ports:
       - 3000:3000 # Next UI
       - 5000:5000 # SMTP
@@ -22,7 +21,3 @@ services:
       - 8099:8099 # PgAdmin
     command: ["/bin/bash", "/workspace/.devcontainer/scripts/entrypoint.sh"]
     tty: true
-
-volumes:
-  workspace-data:
-  # devpod-dind-data:

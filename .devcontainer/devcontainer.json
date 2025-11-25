@@ -22,7 +22,7 @@
 
   "customizations": {
     "vscode": {
-      "workspace": "/workspace/.devcontainer/workspace.code-workspace",
+      "workspace": "/workspace/.devcontainer/.code-workspace",
       "settings": {
         "editor.tabSize": 2,
         "editor.fontSize": 18,
