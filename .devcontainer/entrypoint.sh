@@ -107,6 +107,7 @@ if [ ! -d "backend/.git" ]; then
 fi
 
 echo "🔒 Marking repositories as safe..."
+git config --global --add safe.directory "/workspace" || true
 git config --global --add safe.directory "/workspace/backend" || true
 git config --global --add safe.directory "/workspace/frontend" || true
 

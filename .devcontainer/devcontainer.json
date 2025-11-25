@@ -36,7 +36,8 @@
         "git.openRepositoryInParentFolders": "always",
         "git.scanRepositories": [
           "/workspace/frontend",
-          "/workspace/backend"
+          "/workspace/backend",
+          "/workspace"
         ]
       },
       "extensions": [
