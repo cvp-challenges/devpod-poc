@@ -9,8 +9,6 @@ services:
     volumes:
       - /var/lib/postgresql/data
       - ../postgres:/docker-entrypoint-initdb.d:ro
-    networks:
-      - shared-network
 
   # PgAdmin Service
   pgadmin:
@@ -24,8 +22,6 @@ services:
     environment:
       PGADMIN_CONFIG_SERVER_MODE: "False"
       PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
-    networks:
-      - shared-network
     entrypoint: |
       /bin/sh -c '
       cat <<EOF > /tmp/pgpassfile
@@ -89,8 +85,6 @@ services:
       - ../keycloak:/opt/keycloak/data/import:ro
       # - ../keycloak/theme:/opt/keycloak/themes/uscis
     command: start-dev --import-realm
-    networks:
-      - shared-network
 
   smtp:
     container_name: smtp
@@ -100,8 +94,6 @@ services:
       - 5000:80
       - 25:25
       - 143:143
-    networks:
-      - shared-network
     env_file: ../.env
     environment:
       - ServerOptions__Urls=http://*:80
@@ -114,8 +106,6 @@ services:
     ports:
       - 9092:9092
       - 29092:29092
-    networks:
-      - shared-network
     env_file: ../.env
     environment:
       KAFKA_CFG_NODE_ID: 1
@@ -134,8 +124,6 @@ services:
   #   image: ghcr.io/cvpcorp/kafka-connect:1.0.2
   #   ports:
   #     - 8083:8083
-  #   networks:
-  #     - shared-network
   #   env_file: ../.env
   #   environment:
   #     FORM_UPLOAD_BUCKET: ${FORM_UPLOAD_BUCKET}
@@ -155,15 +143,8 @@ services:
       # - connect
     ports:
       - 8085:8080
-    networks:
-      - shared-network
     env_file: ../.env
     environment:
       DYNAMIC_CONFIG_ENABLED: "true"
     volumes:
       - ../kafa/ui.config.yml:/etc/kafkaui/dynamic_config.yaml
-
-networks:
-  shared-network:
-    name: shared-network
-    external: true
