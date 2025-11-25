@@ -32,8 +32,8 @@ if [ ! -f $ENV ]; then
   SIGNING_TOKEN=$(randomPassword 32)
 
   # Github Repo Urls to clone
-  echo "FRONTEND_REPO=https://github.com/cvp-challenges/devpod-odos-frontend" >> $ENV
-  echo "BACKEND_REPO=https://github.com/cvp-challenges/devpod-odos-backend" >> $ENV
+  echo "FRONTEND_REPO=\"https://github.com/cvp-challenges/devpod-odos-frontend\"" >> $ENV
+  echo "BACKEND_REPO=\"https://github.com/cvp-challenges/devpod-odos-backend\"" >> $ENV
 
   # Authentication signing token
   echo "NEXTAUTH_URL=$NEXTAUTH_URL" >> $ENV
