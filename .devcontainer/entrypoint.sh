@@ -27,7 +27,7 @@ if [ ! -f $ENV ]; then
   NEXTAUTH_URL=http://localhost:$FRONTEND_PORT
   NEXT_APP_API=http://localhost:$BACKEND_PORT
   KEYCLOAK_REALM=odos-iv-tech-challenge
-  KEYCLOAK_REALM_DISPLAY='"ODOS IV Tech Challenge"'
+  KEYCLOAK_REALM_DISPLAY="\"ODOS IV Tech Challenge\""
   KEYCLOAK_URL=http://localhost:$KEYCLOAK_PORT
   SIGNING_TOKEN=$(randomPassword 32)
 
@@ -82,27 +82,26 @@ if [ ! -f $ENV ]; then
   echo "PGADMIN_DEFAULT_EMAIL=admin@cvpcorp.com" >> $ENV
   echo "PGADMIN_DEFAULT_PASSWORD=$(randomPassword 20)" >> $ENV
 
-  # SMTP4Dev Configuration
+  # SMTP Configuration
   echo "SMTP_SERVER_PORT=$SMTP_SERVER_PORT" >> $ENV
   echo "SMTP_SERVER_HOST=smtp" >> $ENV
 
-  # Kafka Configuration
+  # MISC
   echo "KAFKA_BOOTSTRAP_SERVERS=kafka:9092" >> $ENV
   echo "FORM_UPLOAD_BUCKET=formuploads" >> $ENV
   echo "FORM_INBOUND_TOPIC=form.inbound" >> $ENV
 fi
 
 echo "🚀 Configuring env varibales..."
-
-# Export all variables
-export $(grep -v '^#' $ENV | xargs)
+set -a
+source $ENV
+set +a
 
 # --- Git global setup ---
 git config --global credential.helper 'cache --timeout=3600' || true
 
 echo "🚀 Cloning Repositories..."
 
-# --- Repo setup ---
 if [ ! -d "frontend/.git" ]; then
   git clone "$FRONTEND_REPO" /workspace/frontend
 fi
@@ -111,7 +110,6 @@ if [ ! -d "backend/.git" ]; then
   git clone "$BACKEND_REPO" /workspace/backend
 fi
 
-# ✅ Automatically mark all repos as safe
 echo "🔒 Marking repositories as safe..."
 find /workspace -maxdepth 3 -type d -name ".git" -print0 |
 while IFS= read -r -d '' gitdir; do
@@ -120,13 +118,9 @@ while IFS= read -r -d '' gitdir; do
   git config --global --add safe.directory "$repo_dir" || true
 done
 
-# Start Docker daemon
-# dockerd-entrypoint.sh &
+# Ensure Docker is running and ready
+until docker info >/dev/null 2>&1; do sleep 1; done
 
-# Give Docker a few seconds to initialize
-#sleep 5
-
-# Start Docker Compose stack
 echo "🔒 Starting common services..."
 docker-compose -f /workspace/common/services.yml up -d
 
