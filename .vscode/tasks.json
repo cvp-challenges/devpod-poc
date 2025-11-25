@@ -4,7 +4,7 @@
     {
       "label": "Yarn Install",
       "type": "shell",
-      "command": "cd frontend && yarn install --frozen-lockfile",
+      "command": "/workspace/scripts/yarn-install.sh",
       "problemMatcher": [],
       "presentation": {
         "reveal": "always",
@@ -16,7 +16,7 @@
     {
       "label": "Springboot Build",
       "type": "shell",
-      "command": "cd backend && mvn clean install -Dmaven.test.skip=true",
+      "command": "/workspace/scripts/springboot-build.sh",
       "problemMatcher": [],
       "presentation": {
         "reveal": "always",

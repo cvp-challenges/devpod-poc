@@ -44,7 +44,7 @@ if [ ! -f $ENV ]; then
 
   # PostgreSQL Configuration
   echo "POSTGRES_DB=postgres" >> $ENV
-  echo "POSTGRES_HOST=postgres" >> $ENV
+  echo "POSTGRES_HOST=localhost" >> $ENV
   echo "POSTGRES_PORT=$POSTGRES_PORT" >> $ENV
   echo "POSTGRES_USER=postgres" >> $ENV
   echo "POSTGRES_PASSWORD=$(randomPassword 20)" >> $ENV
@@ -80,7 +80,7 @@ if [ ! -f $ENV ]; then
 
   # SMTP Configuration
   echo "SMTP_SERVER_PORT=$SMTP_SERVER_PORT" >> $ENV
-  echo "SMTP_SERVER_HOST=smtp" >> $ENV
+  echo "SMTP_SERVER_HOST=localhost" >> $ENV
 
   # MISC
   echo "KAFKA_BOOTSTRAP_SERVERS=kafka:9092" >> $ENV
