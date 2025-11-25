@@ -7,7 +7,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - /var/lib/postgresql/data
+      # - /var/lib/postgresql/data
       - ./postgres:/docker-entrypoint-initdb.d
 
   # PgAdmin Service
@@ -81,7 +81,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - /opt/keycloak/data
+      # - /opt/keycloak/data
       # - ./keycloak/theme:/opt/keycloak/themes/uscis
       - ./keycloak/realm.json:/opt/keycloak/data/import/realm.json
     command: start-dev --import-realm
