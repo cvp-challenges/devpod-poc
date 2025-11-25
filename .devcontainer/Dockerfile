@@ -11,7 +11,11 @@ RUN rm -rf /var/lib/apt/lists/* && \
 #     chown -R vscode:vscode /home/vscode/.cache
 
 # Ensure workspace exists with proper ownership
-RUN mkdir -p /workspace && chown -R vscode:vscode /workspace
+RUN mkdir -p /workspace && \
+    chown -R vscode:vscode /workspace
+
+RUN groupadd -f docker && \
+    usermod -aG docker vscode
 
 WORKDIR /workspace
 USER vscode
