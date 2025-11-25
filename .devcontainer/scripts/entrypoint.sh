@@ -91,11 +91,11 @@ EOF
   echo "📚 Cloning repositories..."
 
   if [ ! -d "/workspace/frontend/.git" ]; then
-    git clone https://github.com/cvp-challenges/devpod-odos-frontend /workspace/frontend
+    git clone -q https://github.com/cvp-challenges/devpod-odos-frontend /workspace/frontend
   fi
 
   if [ ! -d "/workspace/backend/.git" ]; then
-    git clone https://github.com/cvp-challenges/devpod-odos-backend /workspace/backend
+    git clone -q https://github.com/cvp-challenges/devpod-odos-backend /workspace/backend
   fi
 
   echo "🔒 Configuring Git safe directories..."
@@ -119,6 +119,6 @@ else
   set +a
 fi
 
-chown -R vscode:vscode /workspace /workspace/frontend /workspace/backend /workspace/.env /workspace/.initialized
+chown -R vscode:vscode /workspace/frontend /workspace/backend /workspace/.env /workspace/.initialized
 
 exec sleep infinity
