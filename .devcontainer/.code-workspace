@@ -1,8 +1,8 @@
 {
   "folders": [
-    { "path": "../frontend" },
-    { "path": "../backend" },
-    { "path": "." }
+    { "path": "/workspace" },
+    { "path": "/workspace/backend" },
+    { "path": "/workspace/frontend" }
   ],
   "tasks": {
     "version": "2.0.0",

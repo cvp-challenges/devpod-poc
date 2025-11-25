@@ -34,8 +34,9 @@
         "git.detectNestedRepositories": true,
         "git.openRepositoryInParentFolders": "always",
         "git.scanRepositories": [
-          "/workspace/frontend",
-          "/workspace/backend"
+          "/workspace",
+          "/workspace/backend",
+          "/workspace/frontend"
         ]
       },
       "extensions": [

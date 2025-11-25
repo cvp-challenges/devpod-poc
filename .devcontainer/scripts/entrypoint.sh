@@ -107,7 +107,8 @@ EOF
   until docker info >/dev/null 2>&1; do sleep 1; done
 
   echo "🚀 Starting shared services..."
-  docker-compose -f /workspace/common/services.yml up -d
+  cd /workspace/.devcontainer/services
+  docker-compose up -d
 
   touch "$INIT_FLAG"
   echo "✅ Initialization complete!"
