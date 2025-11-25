@@ -35,7 +35,6 @@
         "git.detectNestedRepositories": true,
         "git.openRepositoryInParentFolders": "always",
         "git.scanRepositories": [
-          "/workspace",
           "/workspace/frontend",
           "/workspace/backend"
         ]
@@ -51,13 +50,9 @@
         "rooveterinaryinc.roo-cline",
         "gydunhn.typescript-essentials"
       ]
-    },
+    }
+  },
 
-    "remoteUser": "vscode",
-    "containerUser": "vscode",
-
-    "mounts": [
-      "source=${localWorkspaceFolder},target=/workspace,type=bind"
-    ]
-  }
+  "remoteUser": "root",
+  "containerUser": "root"
 }

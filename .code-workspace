@@ -16,7 +16,6 @@
     "git.detectNestedRepositories": true,
     "git.openRepositoryInParentFolders": "always",
     "git.scanRepositories": [
-      "/workspace",
       "/workspace/frontend",
       "/workspace/backend"
     ]
