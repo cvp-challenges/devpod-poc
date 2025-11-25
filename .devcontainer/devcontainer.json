@@ -6,7 +6,10 @@
   "shutdownAction": "stopCompose",
 
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "installDockerBuildx": true,
+      "disableIp6tables": true
+    },
     "ghcr.io/devcontainers/features/java:1": {
       "version": "17",
       "installMaven": true
@@ -48,6 +51,13 @@
         "rooveterinaryinc.roo-cline",
         "gydunhn.typescript-essentials"
       ]
-    }
+    },
+
+    "remoteUser": "vscode",
+    "containerUser": "vscode",
+
+    "mounts": [
+      "source=${localWorkspaceFolder},target=/workspace,type=bind"
+    ]
   }
 }

@@ -9,10 +9,6 @@ function randomPassword() {
 
 echo "🚀 DevPod workspace initializing..."
 
-# Ensure workspace is owned by the current VS Code user
-echo "🔒 Fixing /workspace ownership for vscode user..."
-chown -R vscode:vscode /workspace || true
-
 # Initialize $ENV variables
 if [ ! -f $ENV ]; then
   # Exposed external ports
