@@ -1,0 +1,94 @@
+{
+  "folders": [
+    { "path": "../frontend" },
+    { "path": "../backend" },
+    { "path": "." }
+  ],
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Yarn Install",
+        "type": "shell",
+        "command": "./yarn-install.sh",
+        "options": {
+          "cwd": "/workspace/.devcontainer/scripts"
+        },
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "showReuseMessage": false,
+          "clear": true
+        }
+      },
+      {
+        "label": "Springboot Build",
+        "type": "shell",
+        "command": "./springboot-build.sh",
+        "options": {
+          "cwd": "/workspace/.devcontainer/scripts"
+        },
+        "problemMatcher": [],
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "showReuseMessage": false,
+          "clear": true
+        }
+      },
+      {
+        "label": "NextJS UI",
+        "type": "shell",
+        "command": "yarn dev",
+        "options": {
+          "cwd": "/workspace/frontend"
+        },
+        "problemMatcher": [],
+        "dependsOn": "Yarn Install",
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "showReuseMessage": false,
+          "clear": false
+        }
+      },
+      {
+        "label": "Springboot API",
+        "type": "shell",
+        "command": "mvn spring-boot:run -Dmaven.test.skip=true",
+        "options": {
+          "cwd": "/workspace/backend"
+        },
+        "problemMatcher": [],
+        "dependsOn": "Springboot Build",
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "showReuseMessage": false,
+          "clear": false
+        }
+      },
+      {
+        "label": "Start All",
+        "dependsOn": ["Springboot API", "NextJS UI"],
+        "dependsOrder": "parallel"
+      },
+      {
+        "label": "Build All",
+        "dependsOn": ["Yarn Install", "Springboot Build"],
+        "dependsOrder": "parallel",
+        "problemMatcher": [],
+      },
+      {
+        "label": "Start Services",
+        "dependsOn": ["Build All", "Start All"],
+        "dependsOrder": "sequence",
+        "problemMatcher": [],
+        "runOptions": {
+          "runOn": "folderOpen"
+        }
+      }
+    ]
+  }
+}

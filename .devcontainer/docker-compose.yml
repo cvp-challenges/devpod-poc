@@ -4,11 +4,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    user: vscode
     working_dir: /workspace
     environment:
       NODE_ENV: development
     volumes:
-      - ..:/workspace
+      - workspace-data:/workspace
       # - /home/vscode/.cache/yarn
       # - /home/vscode/.cache/Cypress
       # - devpod-dind-data:/var/lib/docker
@@ -19,8 +20,9 @@ services:
       - 8085:8085 # Kafka
       - 8089:8089 # Springboot
       - 8099:8099 # PgAdmin
-    command: ["/bin/bash", "/workspace/.devcontainer/entrypoint.sh"]
+    command: ["/bin/bash", "/workspace/.devcontainer/scripts/entrypoint.sh"]
     tty: true
 
-# volumes:
-#   devpod-dind-data:
+volumes:
+  workspace-data:
+  # devpod-dind-data:

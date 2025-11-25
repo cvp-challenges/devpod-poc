@@ -3,7 +3,7 @@ services:
   postgres:
     image: postgres:15
     restart: unless-stopped
-    env_file: ../.env
+    env_file: /workspace/.local/.env
     ports:
       - 5432:5432
     volumes:
@@ -18,7 +18,7 @@ services:
       - postgres
     ports:
       - 8099:80
-    env_file: ../.env
+    env_file: /workspace/.local/.env
     environment:
       PGADMIN_CONFIG_SERVER_MODE: "False"
       PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
@@ -66,7 +66,7 @@ services:
     depends_on:
       - postgres
     restart: unless-stopped
-    env_file: ../.env
+    env_file: /workspace/.local/.env
     environment:
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgres:${POSTGRES_PORT}/${KEYCLOAK_DB}
@@ -94,7 +94,7 @@ services:
       - 5000:80
       - 25:25
       - 143:143
-    env_file: ../.env
+    env_file: /workspace/.local/.env
     environment:
       - ServerOptions__Urls=http://*:80
       - ServerOptions__HostName=smtp
@@ -106,7 +106,7 @@ services:
     ports:
       - 9092:9092
       - 29092:29092
-    env_file: ../.env
+    env_file: /workspace/.local/.env
     environment:
       KAFKA_CFG_NODE_ID: 1
       KAFKA_CFG_PROCESS_ROLES: broker,controller
@@ -124,7 +124,7 @@ services:
   #   image: ghcr.io/cvpcorp/kafka-connect:1.0.2
   #   ports:
   #     - 8083:8083
-  #   env_file: ../.env
+  #   env_file: /workspace/.local/.env
   #   environment:
   #     FORM_UPLOAD_BUCKET: ${FORM_UPLOAD_BUCKET}
   #     FORM_INBOUND_TOPIC: ${FORM_INBOUND_TOPIC}
@@ -143,7 +143,7 @@ services:
       # - connect
     ports:
       - 8085:8080
-    env_file: ../.env
+    env_file: /workspace/.local/.env
     environment:
       DYNAMIC_CONFIG_ENABLED: "true"
     volumes:

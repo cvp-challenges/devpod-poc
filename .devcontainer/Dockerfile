@@ -10,6 +10,8 @@ RUN rm -rf /var/lib/apt/lists/* && \
 # RUN mkdir -p /home/vscode/.cache/yarn /home/vscode/.cache/Cypress && \
 #     chown -R vscode:vscode /home/vscode/.cache
 
-# RUN mkdir -p /workspace && chown vscode:vscode /workspace
+# Ensure workspace exists with proper ownership
+RUN mkdir -p /workspace && chown -R vscode:vscode /workspace
 
 WORKDIR /workspace
+USER vscode
