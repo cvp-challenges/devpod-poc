@@ -1,3 +1,4 @@
+name: devpod-poc
 ports:
   - 3000:3000 # Next UI
   - 5000:5000 # SMTP
