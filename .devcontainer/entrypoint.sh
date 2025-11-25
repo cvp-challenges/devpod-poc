@@ -10,10 +10,8 @@ function randomPassword() {
 echo "🚀 DevPod workspace initializing..."
 
 # Ensure workspace is owned by the current VS Code user
-if [ "$(id -u)" -eq 0 ]; then
-  echo "🔒 Fixing /workspace ownership for vscode user..."
-  chown -R vscode:vscode /workspace || true
-fi
+echo "🔒 Fixing /workspace ownership for vscode user..."
+chown -R vscode:vscode /workspace || true
 
 # Initialize $ENV variables
 if [ ! -f $ENV ]; then
@@ -113,12 +111,8 @@ if [ ! -d "backend/.git" ]; then
 fi
 
 echo "🔒 Marking repositories as safe..."
-find /workspace -maxdepth 3 -type d -name ".git" -print0 |
-while IFS= read -r -d '' gitdir; do
-  repo_dir="$(dirname "$gitdir")"
-  echo "   ➕ Safe: $repo_dir"
-  git config --global --add safe.directory "$repo_dir" || true
-done
+git config --global --add safe.directory "/workspace/backend" || true
+git config --global --add safe.directory "/workspace/frontend" || true
 
 # Ensure Docker is running and ready
 until docker info >/dev/null 2>&1; do sleep 1; done

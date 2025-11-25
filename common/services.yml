@@ -8,7 +8,7 @@ services:
       - 5432:5432
     volumes:
       - /var/lib/postgresql/data
-      - ../postgres:/docker-entrypoint-initdb.d:ro
+      - ./postgres:/docker-entrypoint-initdb.d
 
   # PgAdmin Service
   pgadmin:
@@ -82,8 +82,8 @@ services:
       - 8080:8080
     volumes:
       - /opt/keycloak/data
-      - ../keycloak:/opt/keycloak/data/import:ro
-      # - ../keycloak/theme:/opt/keycloak/themes/uscis
+      # - ./keycloak/theme:/opt/keycloak/themes/uscis
+      - ./keycloak/realm.json:/opt/keycloak/data/import/realm.json
     command: start-dev --import-realm
 
   smtp:
@@ -133,7 +133,7 @@ services:
   #     DATA_DB_USER: ${DATA_DB_USER}
   #     DATA_DB_PASSWORD: ${DATA_DB_PASSWORD}
   #   volumes:
-  #     - ../kafa/connect-distributed.properties:/opt/bitnami/kafka/config/connect-distributed.properties
+  #     - ./kafa/connect-distributed.properties:/opt/bitnami/kafka/config/connect-distributed.properties
 
   kafka-ui:
     container_name: kafka-ui
@@ -147,4 +147,4 @@ services:
     environment:
       DYNAMIC_CONFIG_ENABLED: "true"
     volumes:
-      - ../kafa/ui.config.yml:/etc/kafkaui/dynamic_config.yaml
+      - ./kafa/ui.config.yml:/etc/kafkaui/dynamic_config.yaml
