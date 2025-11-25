@@ -9,7 +9,8 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /home/vscode/.cache/yarn /home/vscode/.cache/Cypress && \
-    chown -R vscode:vscode /home/vscode/.cache
+    chown -R vscode:vscode /home/vscode/.cache && \
+    chown -R vscode:vscode /workspace
 
 USER vscode
 
