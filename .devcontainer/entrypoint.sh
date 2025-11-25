@@ -94,22 +94,22 @@ source $ENV
 set +a
 
 # --- Git global setup ---
-git config --global credential.helper 'cache --timeout=3600' || true
+sudo -u vscode git config --global credential.helper 'cache --timeout=3600' || true
 
 echo "🚀 Cloning Repositories..."
 
 if [ ! -d "frontend/.git" ]; then
-  git clone https://github.com/cvp-challenges/devpod-odos-frontend /workspace/frontend
+  sudo -u vscode git clone https://github.com/cvp-challenges/devpod-odos-frontend /workspace/frontend
 fi
 
 if [ ! -d "backend/.git" ]; then
-  git clone https://github.com/cvp-challenges/devpod-odos-backend /workspace/backend
+  sudo -u vscode git clone https://github.com/cvp-challenges/devpod-odos-backend /workspace/backend
 fi
 
-echo "🔒 Marking repositories as safe..."
-git config --global --add safe.directory "/workspace" || true
-git config --global --add safe.directory "/workspace/backend" || true
-git config --global --add safe.directory "/workspace/frontend" || true
+echo "🔒 Marking repositories as safe for Git (vscode user)..."
+sudo -u vscode git config --global --add safe.directory /workspace || true
+sudo -u vscode git config --global --add safe.directory /workspace/backend || true
+sudo -u vscode git config --global --add safe.directory /workspace/frontend || true
 
 # Ensure Docker is running and ready
 until docker info >/dev/null 2>&1; do sleep 1; done

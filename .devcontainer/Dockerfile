@@ -12,6 +12,4 @@ RUN rm -rf /var/lib/apt/lists/* && \
 
 # RUN mkdir -p /workspace && chown vscode:vscode /workspace
 
-USER vscode
-
 WORKDIR /workspace

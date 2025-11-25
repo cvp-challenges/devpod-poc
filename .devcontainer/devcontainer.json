@@ -54,6 +54,6 @@
     }
   },
 
-  "containerUser": "vscode",
+  "containerUser": "root",
   "remoteUser": "vscode"
 }
