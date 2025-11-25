@@ -118,4 +118,6 @@ else
   set +a
 fi
 
+chown -R vscode:vscode /workspace /workspace/frontend /workspace/backend /workspace/.env /workspace/.initialized
+
 exec sleep infinity
