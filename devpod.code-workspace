@@ -1,0 +1,13 @@
+{
+  "folders": [
+    { "path": "." },
+    { "path": "backend" },
+    { "path": "frontend" }
+  ],
+  "settings": {
+    "editor.tabSize": 2,
+    "editor.fontSize": 18,
+    "git.confirmSync": false,
+    "git.openRepositoryInParentFolders": "always"
+  }
+}

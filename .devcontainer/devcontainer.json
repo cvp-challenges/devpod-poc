@@ -22,17 +22,12 @@
 
   "customizations": {
     "vscode": {
-      "workspace": "/workspace/.devcontainer/.code-workspace",
       "settings": {
-        "editor.tabSize": 2,
-        "editor.fontSize": 18,
-        "files.encoding": "utf8",
         "files.eol": "\n",
+        "files.encoding": "utf8",
         "terminal.integrated.shell.linux": "/bin/bash",
-        "git.confirmSync": false,
         "git.autoRepositoryDetection": "subFolders",
         "git.detectNestedRepositories": true,
-        "git.openRepositoryInParentFolders": "always",
         "git.scanRepositories": [
           "/workspace",
           "/workspace/backend",

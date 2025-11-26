@@ -7,7 +7,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      # - /var/lib/postgresql/data
+      - /var/lib/postgresql/data
       - ./postgres:/docker-entrypoint-initdb.d
 
   # PgAdmin Service
@@ -133,7 +133,7 @@ services:
   #     DATA_DB_USER: ${DATA_DB_USER}
   #     DATA_DB_PASSWORD: ${DATA_DB_PASSWORD}
   #   volumes:
-  #     - ./kafa/connect-distributed.properties:/opt/bitnami/kafka/config/connect-distributed.properties
+  #     - ./kafka/connect-distributed.properties:/opt/bitnami/kafka/config/connect-distributed.properties
 
   kafka-ui:
     container_name: kafka-ui
@@ -147,4 +147,4 @@ services:
     environment:
       DYNAMIC_CONFIG_ENABLED: "true"
     volumes:
-      - ./kafa/ui.config.yml:/etc/kafkaui/dynamic_config.yaml
+      - ./kafka/ui.config.yml:/etc/kafkaui/dynamic_config.yaml
