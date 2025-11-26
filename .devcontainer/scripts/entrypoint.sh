@@ -7,7 +7,9 @@ if [ ! -f "$INIT_FLAG" ]; then
   echo "🚀 First-time initialization..."
 
   # Generate .env file
-  bash /workspace/.devcontainer/scripts/setup-env-vars.sh /workspace
+  bash /workspace/.devcontainer/scripts/setup-env-vars.sh /tmp
+  mv "/tmp/.env" /workspace/.env
+  chown -R vscode:vscode /workspace/.env
 
   echo "📚 Cloning repositories..."
 
@@ -40,6 +42,6 @@ set -a
 source "/workspace/.env"
 set +a
 
-chown -R vscode:vscode /workspace/frontend /workspace/backend /workspace/.env /workspace/.initialized
+chown -R vscode:vscode /workspace/frontend /workspace/backend /workspace/.initialized
 
 exec sleep infinity
