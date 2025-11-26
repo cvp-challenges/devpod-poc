@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+ls -ld /workspace
+ls -l /workspace | head
+id
+
 ENV=/workspace/.env
 INIT_FLAG="/workspace/.initialized"
 
