@@ -6,7 +6,7 @@
       "type": "shell",
       "command": "./yarn-install.sh",
       "options": {
-        "cwd": "/workspace/.devcontainer/scripts"
+        "cwd": "/home/vscode/scripts"
       },
       "problemMatcher": [],
       "presentation": {
@@ -21,7 +21,7 @@
       "type": "shell",
       "command": "./springboot-build.sh",
       "options": {
-        "cwd": "/workspace/.devcontainer/scripts"
+        "cwd": "/home/vscode/scripts"
       },
       "problemMatcher": [],
       "presentation": {
@@ -36,7 +36,7 @@
       "type": "shell",
       "command": "yarn dev",
       "options": {
-        "cwd": "/workspace/frontend"
+        "cwd": "/home/vscode/projects/frontend"
       },
       "problemMatcher": [],
       "dependsOn": "Yarn Install",
@@ -52,7 +52,7 @@
       "type": "shell",
       "command": "mvn spring-boot:run -Dmaven.test.skip=true",
       "options": {
-        "cwd": "/workspace/backend"
+        "cwd": "/home/vscode/projects/backend"
       },
       "problemMatcher": [],
       "dependsOn": "Springboot Build",

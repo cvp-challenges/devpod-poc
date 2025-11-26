@@ -16,3 +16,6 @@ RUN groupadd -f docker && usermod -aG docker vscode
 
 WORKDIR /workspace
 USER vscode
+
+COPY .devcontainer/scripts /home/vscode/scripts
+RUN chmod +x /home/vscode/scripts/*.sh

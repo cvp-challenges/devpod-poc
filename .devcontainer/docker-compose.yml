@@ -9,7 +9,7 @@ services:
     environment:
       NODE_ENV: development
     volumes:
-      - ..:/workspace:cached
+      - ..:/workspace:ro,cached
       - /home/vscode/.cache/yarn
       - /home/vscode/.cache/Cypress
     ports:
@@ -19,5 +19,5 @@ services:
       - 8085:8085 # Kafka
       - 8089:8089 # Springboot
       - 8099:8099 # PgAdmin
-    command: ["/bin/bash", "/workspace/.devcontainer/scripts/entrypoint.sh"]
+    command: ["/bin/bash", "/home/vscode/scripts/entrypoint.sh"]
     tty: true

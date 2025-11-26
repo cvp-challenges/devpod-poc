@@ -13,7 +13,7 @@ if [ ! -f "$INIT_FLAG" ]; then
   echo "🚀 First-time initialization..."
 
   # Run env setup (this now always works)
-  . /workspace/.devcontainer/scripts/setup-env-vars.sh $ENV_FILE
+  . $USER_HOME/scripts/setup-env-vars.sh $ENV_FILE
 
   ##############################
   # Clone frontend/backend if missing
