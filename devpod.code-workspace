@@ -1,8 +1,8 @@
 {
   "folders": [
-    { "path": "." },
-    { "path": "backend" },
-    { "path": "frontend" }
+    { "path": "/workspace" },
+    { "path": "/home/vscode/projects/backend" },
+    { "path": "/home/vscode/projects/frontend" }
   ],
   "settings": {
     "editor.tabSize": 2,

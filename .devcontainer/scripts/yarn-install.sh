@@ -4,9 +4,9 @@ set -e
 # Wait until package.json exists before running yarn install
 echo "⏳ Waiting for package.json to be available..."
 
-while [ ! -f /workspace/frontend/package.json ]; do
+while [ ! -f /home/vscode/frontend/package.json ]; do
   sleep 1
 done
 
-cd /workspace/frontend
+cd /home/vscode/frontend
 yarn install --frozen-lockfile

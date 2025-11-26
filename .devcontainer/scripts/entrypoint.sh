@@ -16,13 +16,6 @@ if [ ! -f "$INIT_FLAG" ]; then
   . /workspace/.devcontainer/scripts/setup-env-vars.sh $ENV_FILE
 
   ##############################
-  # Create /workspace/.env symlink
-  ##############################
-  echo "🔗 Linking /workspace/.env → ${ENV_FILE}"
-  rm -f "${WORKSPACE_ENV}" || true
-  ln -s "${ENV_FILE}" "${WORKSPACE_ENV}"
-
-  ##############################
   # Clone frontend/backend if missing
   ##############################
   echo "📚 Cloning repositories..."
@@ -32,10 +25,6 @@ if [ ! -f "$INIT_FLAG" ]; then
 
   [ ! -d "$PROJECT_ROOT/frontend/.git" ] && \
       git clone -q https://github.com/cvp-challenges/devpod-odos-frontend $PROJECT_ROOT/frontend
-
-  # Link into /workspace for IDE visibility
-  ln -sfn "$PROJECT_ROOT/backend" /workspace/backend
-  ln -sfn "$PROJECT_ROOT/frontend" /workspace/frontend
 
   ##############################
   # Configure Git safe directories
