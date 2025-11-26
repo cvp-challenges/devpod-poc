@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -e
 
 USER_HOME="/home/vscode"
 ENV_FILE="${USER_HOME}/.env"
