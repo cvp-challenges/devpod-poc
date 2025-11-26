@@ -37,7 +37,7 @@ fi
 
 echo "📁 Sourcing environment variables..."
 set -a
-source "../../.env"
+source "/workspace/.env"
 set +a
 
 chown -R vscode:vscode /workspace/frontend /workspace/backend /workspace/.env /workspace/.initialized
