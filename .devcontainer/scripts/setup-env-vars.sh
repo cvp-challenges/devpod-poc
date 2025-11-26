@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-ENV="${1:-"../.."}/.env"
+ENV="${1:-"../../.env"}"
 
 # Generate .env file
 if [ ! -f "$ENV" ]; then

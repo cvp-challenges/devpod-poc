@@ -10,8 +10,8 @@ services:
       NODE_ENV: development
     volumes:
       - ..:/workspace:cached
-      # - /home/vscode/.cache/yarn
-      # - /home/vscode/.cache/Cypress
+      - /home/vscode/.cache/yarn
+      - /home/vscode/.cache/Cypress
     ports:
       - 3000:3000 # Next UI
       - 5000:5000 # SMTP

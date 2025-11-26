@@ -29,9 +29,9 @@
         "git.autoRepositoryDetection": "subFolders",
         "git.detectNestedRepositories": true,
         "git.scanRepositories": [
-          "/workspace",
-          "/workspace/backend",
-          "/workspace/frontend"
+          "/home/vscode/projects",
+          "/home/vscode/projects/backend",
+          "/home/vscode/projects/frontend"
         ]
       },
       "extensions": [
