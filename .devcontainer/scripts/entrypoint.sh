@@ -7,7 +7,7 @@ if [ ! -f "$INIT_FLAG" ]; then
   echo "🚀 First-time initialization..."
 
   # Generate .env file
-  ./setup-env-vars.sh
+  /workspace/.devcontainer/scripts/setup-env-vars.sh
 
   echo "📚 Cloning repositories..."
 
