@@ -6,10 +6,14 @@ INIT_FLAG="/workspace/.initialized"
 if [ ! -f "$INIT_FLAG" ]; then
   echo "🚀 First-time initialization..."
 
+  ls -al /workspace/.devcontainer/scripts
+
+  chmod +x /workspace/.devcontainer/scripts/setup-env-vars.sh
+
+  ls -al /workspace/.devcontainer/scripts
+
   # Generate .env file
-  /workspace/.devcontainer/scripts/setup-env-vars.sh /tmp
-  mv /tmp/.env /workspace/.env
-  chown vscode:vscode /workspace/.env
+  /workspace/.devcontainer/scripts/setup-env-vars.sh /workspace
 
   echo "📚 Cloning repositories..."
 
