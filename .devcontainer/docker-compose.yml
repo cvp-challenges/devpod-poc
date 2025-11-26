@@ -9,7 +9,7 @@ services:
     environment:
       NODE_ENV: development
     volumes:
-      - ..:/workspace:ro,cached
+      - ..:/workspace:cached
       - /home/vscode/.cache/yarn
       - /home/vscode/.cache/Cypress
     ports:
