@@ -7,8 +7,18 @@ RUN rm -rf /var/lib/apt/lists/* && \
     apt-get upgrade -y && \
     apt-get install -y ca-certificates curl gnupg lsb-release wget postgresql-client vim less nano
 
-RUN mkdir -p /workspace /home/vscode/scripts /home/vscode/projects /home/vscode/.cache && \
-    chown -R vscode:vscode /home/vscode/scripts /home/vscode/projects /home/vscode/.cache
+RUN mkdir -p /workspace \
+        /home/vscode/scripts \
+        /home/vscode/projects \
+        /home/vscode/.cache && \
+        /home/vscode/.cache/yarn && \
+        /home/vscode/.cache/Cypress && \
+    chown -R vscode:vscode \
+        /home/vscode/scripts \
+        /home/vscode/projects \
+        /home/vscode/.cache \
+        /home/vscode/.cache/yarn \
+        /home/vscode/.cache/Cypress
 
 RUN groupadd -f docker && usermod -aG docker vscode
 
