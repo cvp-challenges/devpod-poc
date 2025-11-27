@@ -10,8 +10,8 @@ RUN rm -rf /var/lib/apt/lists/* && \
 RUN mkdir -p /workspace \
         /home/vscode/scripts \
         /home/vscode/projects \
-        /home/vscode/.cache && \
-        /home/vscode/.cache/yarn && \
+        /home/vscode/.cache \
+        /home/vscode/.cache/yarn \
         /home/vscode/.cache/Cypress && \
     chown -R vscode:vscode \
         /home/vscode/scripts \
